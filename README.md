@@ -90,7 +90,7 @@ python analyze.py
 | RL agent live view | ✅ Working (uses fallback policy until trained) |
 | Crash / lag fixes (Windows) | ✅ Fixed |
 | Telemetry logging | ✅ Working |
-| Batch evaluation & analysis | ✅ Working |
+| Batch evaluation & analysis | need to test  |
 | Trained SAC checkpoint | ❌ Not trained yet (`rl/checkpoints/sac_metadrive.zip` missing) |
 | Strong off-road penalties in RL | ⚠️ Basic only (see below) |
 | Auto-stop when car leaves road | ❌ Not implemented yet |
