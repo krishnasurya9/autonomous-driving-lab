@@ -7,9 +7,8 @@ from tkinter import ttk, messagebox
 # Ensure project root in python path
 sys.path.insert(0, os.path.abspath("."))
 
-PYTHON_EXE = os.path.abspath(r"A:\envs\main_env\Scripts\python.exe")
-if not os.path.exists(PYTHON_EXE):
-    PYTHON_EXE = sys.executable
+# Use PYTHON env var if set, otherwise the interpreter running this app
+PYTHON_EXE = os.environ.get("PYTHON", sys.executable)
 
 class DrivingLabApp:
     """GUI Launcher App for Autonomous Driving Simulator & Agent Benchmark Lab."""

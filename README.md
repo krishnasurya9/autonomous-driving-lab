@@ -9,7 +9,7 @@ An interactive, live 3D driving simulator and controlled research benchmark for 
 The primary user experience is a live 3D driving game launcher. Run:
 
 ```bash
-A:\envs\main_env\Scripts\python.exe app.py
+python app.py
 ```
 
 This launches the GUI Lab Interface:
@@ -61,19 +61,19 @@ Every 3D driving mode displays a real-time HUD with telemetry:
 
 ```bash
 # 1. Verify environment & seed reproducibility
-A:\envs\main_env\Scripts\python.exe test_feasibility.py
+python test_feasibility.py
 
 # 2. Single-Agent Live 3D Launch
-A:\envs\main_env\Scripts\python.exe run.py --agent human --seed 2037
-A:\envs\main_env\Scripts\python.exe run.py --agent llm --seed 2037
-A:\envs\main_env\Scripts\python.exe run.py --agent rl --seed 2037
+python run.py --agent human --seed 2037
+python run.py --agent llm --seed 2037
+python run.py --agent rl --seed 2037
 
 # 3. Train RL (SAC) policy on training seeds (1000..1099)
-A:\envs\main_env\Scripts\python.exe train.py --algorithm sac --timesteps 10000
+python train.py --algorithm sac --timesteps 10000
 
 # 4. Run 20-seed matched evaluation benchmark
-A:\envs\main_env\Scripts\python.exe evaluate.py --seeds test --count 20
+python evaluate.py --seeds test --count 20
 
 # 5. Generate statistical summary tables and visualization plots
-A:\envs\main_env\Scripts\python.exe analyze.py
+python analyze.py
 ```

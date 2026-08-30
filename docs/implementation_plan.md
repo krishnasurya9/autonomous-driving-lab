@@ -46,7 +46,7 @@ The simulator (MetaDrive) is used as a neutral experimental laboratory. All thre
 ## Proposed Directory & File Structure
 
 ```text
-a:\MSC\sem 3\Rl\project\
+autonomous-driving-lab/
 ├── README.md                          # Project documentation and CLI usage instructions
 ├── requirements.txt                   # Dependency list (metadrive-simulator, stable-baselines3, etc.)
 ├── config.yaml                        # Central configuration file
