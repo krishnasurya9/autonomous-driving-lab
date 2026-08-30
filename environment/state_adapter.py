@@ -35,13 +35,18 @@ class DrivingState:
 
 
 class StateAdapter:
-    """Extracts DrivingState from MetaDrive vehicle environment state."""
+    """Extracts one shared semantic state from supported environment objects."""
 
     def __init__(self, target_speed_kmh: float = 40.0):
         self.target_speed_kmh = target_speed_kmh
 
     def extract_state(self, env_or_obs: Any, vehicle: Optional[Any] = None) -> DrivingState:
-        """Derives structured DrivingState from MetaDrive vehicle and environment objects."""
+        """Read native 2D state, or adapt a MetaDrive vehicle when one is supplied."""
+        if hasattr(env_or_obs, "get_driving_state"):
+            return env_or_obs.get_driving_state()
+        inner = getattr(env_or_obs, "_env", None)
+        if inner is not None and hasattr(inner, "get_driving_state"):
+            return inner.get_driving_state()
         if vehicle is None and hasattr(env_or_obs, "vehicle"):
             vehicle = env_or_obs.vehicle
 

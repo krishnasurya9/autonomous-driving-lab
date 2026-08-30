@@ -11,7 +11,8 @@ class TransformersBackend(LLMBackend):
     def generate_decision_raw(self, prompt_text: str) -> Tuple[str, float]:
         start = time.time()
         # Rule-based fallback mimicking small instruction model outputs
-        if "OBSTACLE: YES" in prompt_text.upper():
+        prompt_upper = prompt_text.upper()
+        if "OBSTACLE PRESENT: YES" in prompt_upper or "OBSTACLE: YES" in prompt_upper:
             json_out = '{"target_speed_kmh": 20.0, "maneuver": "SLOW_DOWN", "lane_target": "CENTER"}'
         elif "HIGH" in prompt_text.upper() or "CURVE" in prompt_text.upper():
             json_out = '{"target_speed_kmh": 30.0, "maneuver": "SLOW_DOWN", "lane_target": "CENTER"}'

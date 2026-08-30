@@ -1,29 +1,24 @@
-# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
 .venv/
 venv/
 env/
-
-# IDE
 .idea/
 .vscode/
 *.swp
-
-# OS
 Thumbs.db
 .DS_Store
-
-# Secrets
 .env
 .env.*
 *.pem
 credentials.json
 
-# Generated experiment outputs (keep telemetry Python package in git)
+# Generated experiment artifacts; keep the telemetry Python package tracked.
 telemetry/*.json
-telemetry/**/__pycache__/
+telemetry/**/*.json
+telemetry_2d/*.json
+telemetry_2d/**/*.json
 recordings/
 results/
 rl/checkpoints/

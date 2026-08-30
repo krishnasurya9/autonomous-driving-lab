@@ -48,6 +48,7 @@ class LLMAgent(BaseAgent):
         self.step_counter = 0
         self.last_latency = 0.0
         self.last_invalid = False
+        self.last_backend = "pending"
         self._decision_lock = threading.Lock()
         self._llm_thread: Optional[threading.Thread] = None
 
@@ -56,6 +57,7 @@ class LLMAgent(BaseAgent):
         self.current_decision = HighLevelDecision(target_speed_kmh=self.state_adapter.target_speed_kmh, maneuver=MANEUVER_MAINTAIN)
         self.last_latency = 0.0
         self.last_invalid = False
+        self.last_backend = "pending"
         self._llm_thread = None
 
     def _request_decision_async(self, prompt_text: str) -> None:
@@ -64,14 +66,18 @@ class LLMAgent(BaseAgent):
 
         def _worker() -> None:
             raw_response, latency = self.backend.generate_decision_raw(prompt_text)
+            backend_used = "rule_fallback" if isinstance(self.backend, TransformersBackend) else self.backend.__class__.__name__
             if not raw_response:
                 fb_backend = TransformersBackend()
-                raw_response, latency = fb_backend.generate_decision_raw(prompt_text)
+                raw_response, fallback_latency = fb_backend.generate_decision_raw(prompt_text)
+                latency += fallback_latency
+                backend_used = "rule_fallback"
             decision, invalid = OutputParser.parse_response(raw_response, fallback_speed=self.state_adapter.target_speed_kmh)
             with self._decision_lock:
                 self.current_decision = decision
                 self.last_latency = latency
                 self.last_invalid = invalid
+                self.last_backend = backend_used
 
         self._llm_thread = threading.Thread(target=_worker, daemon=True)
         self._llm_thread.start()
@@ -79,8 +85,14 @@ class LLMAgent(BaseAgent):
     def get_action(self, env: Any, obs: Any) -> Tuple[np.ndarray, Dict[str, Any]]:
         state: DrivingState = self.state_adapter.extract_state(env)
 
-        # Trigger LLM high-level decision at decision interval (non-blocking for render loop)
+        # In headless evaluation, simulation steps are not paced to real time.
+        # Wait at the next planner tick for the previous async request so the
+        # LLM gets its configured decision interval and telemetry records it.
         if self.step_counter % self.decision_interval_steps == 0:
+            if self.step_counter and not getattr(env, "render_enabled", False):
+                if self._llm_thread is not None and self._llm_thread.is_alive():
+                    timeout = float(getattr(self.backend, "timeout_sec", 5.0)) + 1.0
+                    self._llm_thread.join(timeout=timeout)
             prompt_text = generate_user_prompt(state.to_prompt_text())
             self._request_decision_async(prompt_text)
 
@@ -88,6 +100,7 @@ class LLMAgent(BaseAgent):
             active_decision = self.current_decision
             active_latency = self.last_latency
             active_invalid = self.last_invalid
+            active_backend = self.last_backend
 
         # Compute continuous low-level action
         action = self.controller.compute_action(
@@ -100,8 +113,10 @@ class LLMAgent(BaseAgent):
         info = {
             "agent_type": "LLM",
             "decision": active_decision.to_dict(),
-            "llm_latency_sec": active_latency,
+            # Record a latency once at a planner tick, not once per simulator frame.
+            "llm_latency_sec": active_latency if self.step_counter % self.decision_interval_steps == 0 and active_backend != "pending" else None,
             "llm_invalid_output": active_invalid,
+            "llm_backend": active_backend,
         }
 
         self.step_counter += 1

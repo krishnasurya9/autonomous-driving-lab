@@ -1,7 +1,9 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath("."))
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, PROJECT_DIR)
+os.chdir(PROJECT_DIR)
 
 from evaluation.compare_agents import compare_telemetry_results
 from visualization.trajectories import plot_trajectory_overlay
@@ -15,12 +17,12 @@ def main():
     print("=" * 60)
 
     # 1. Statistical paired comparisons & metric CSV generation
-    compare_telemetry_results(telemetry_dir="telemetry", output_results_dir="results")
+    compare_telemetry_results(telemetry_dir="telemetry_2d", output_results_dir="results")
 
     # 2. Generate visualization plots
     plot_performance_comparison(csv_path="results/summary_metrics.csv", output_dir="results/plots")
-    plot_trajectory_overlay(telemetry_dir="telemetry", output_dir="results/plots")
-    plot_speed_profiles(telemetry_dir="telemetry", output_dir="results/plots")
+    plot_trajectory_overlay(telemetry_dir="telemetry_2d", output_dir="results/plots")
+    plot_speed_profiles(telemetry_dir="telemetry_2d", output_dir="results/plots")
     plot_rl_learning_curve(output_dir="results/plots")
 
     print("=" * 60)

@@ -13,7 +13,7 @@ class RLAgent(BaseAgent):
     Outputs continuous (steering, throttle_brake) directly.
     """
 
-    def __init__(self, checkpoint_path: str = "rl/checkpoints/sac_metadrive.zip", target_speed_kmh: float = 40.0):
+    def __init__(self, checkpoint_path: str = "rl/checkpoints/sac_2d.zip", target_speed_kmh: float = 40.0):
         super().__init__(name="RL")
         self.checkpoint_path = checkpoint_path
         self.state_adapter = StateAdapter(target_speed_kmh=target_speed_kmh)
@@ -43,5 +43,8 @@ class RLAgent(BaseAgent):
                 heading_error_deg=state.heading_error_deg,
             )
 
-        info = {"agent_type": "RL", "policy": "SAC"}
+        info = {
+            "agent_type": "RL",
+            "policy": "SAC" if self.model is not None else "fallback_controller",
+        }
         return action, info

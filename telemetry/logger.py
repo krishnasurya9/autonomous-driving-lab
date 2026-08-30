@@ -34,16 +34,35 @@ class TelemetryLogger:
         })
 
     def save(self, task_completed=False, terminated_reason=None):
-        timestamp = int(time.time())
+        timestamp = int(time.time() * 1000)
         filename = f"{self.agent_type}_{self.scenario_id}_{timestamp}.json"
         filepath = os.path.join(self.output_dir, filename)
+        llm_backends = sorted({
+            step.get("llm_backend") for step in self.steps
+            if step.get("llm_backend") not in (None, "", "pending")
+        })
+        llm_latencies = [
+            step["llm_latency_sec"] for step in self.steps
+            if isinstance(step.get("llm_latency_sec"), (int, float)) and step["llm_latency_sec"] > 0
+        ]
+        policies = sorted({step.get("agent_policy") for step in self.steps if step.get("agent_policy")})
         
         data = {
             "agent_type": self.agent_type,
             "scenario_id": self.scenario_id,
             "seed": self.seed,
+            "target_speed_kmh": 40.0,
             "task_completed": task_completed,
             "terminated_reason": terminated_reason,
+            "collisions": self.collisions,
+            "off_road_events": int(self.off_road),
+            "episode_steps": len(self.steps),
+            "completion_time_sec": len(self.steps) * 0.05,
+            "agent_policies": policies,
+            "llm_backends": llm_backends,
+            "llm_real_inference": any(backend != "rule_fallback" for backend in llm_backends) if self.agent_type.lower() == "llm" else None,
+            "avg_decision_latency_sec": sum(llm_latencies) / len(llm_latencies) if llm_latencies else 0.0,
+            "invalid_llm_outputs": sum(bool(step.get("llm_invalid_output", False)) for step in self.steps),
             "steps": self.steps
         }
         

@@ -4,19 +4,22 @@ import subprocess
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-# Ensure project root in python path
-sys.path.insert(0, os.path.abspath("."))
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, PROJECT_DIR)
 
 # Use PYTHON env var if set, otherwise the interpreter running this app
-PYTHON_EXE = os.environ.get("PYTHON", sys.executable)
+DEFAULT_ENV_PYTHON = r"A:\envs\metadrive_env\Scripts\python.exe"
+PYTHON_EXE = os.environ.get("PYTHON", DEFAULT_ENV_PYTHON)
+if not os.path.exists(PYTHON_EXE):
+    PYTHON_EXE = sys.executable
 
 class DrivingLabApp:
     """GUI Launcher App for Autonomous Driving Simulator & Agent Benchmark Lab."""
 
     def __init__(self, root: tk.Tk):
         self.root = root
-        self.root.title("AUTONOMOUS DRIVING LAB - MetaDrive Environment")
-        self.root.geometry("640x580")
+        self.root.title("Autonomous Driving Lab · 2D")
+        self.root.geometry("640x540")
         self.root.resizable(False, False)
         self.root.configure(bg="#1E1E2E")
 
@@ -41,7 +44,7 @@ class DrivingLabApp:
 
         subtitle_lbl = ttk.Label(
             header_frame,
-            text="Comparative Evaluation: Human vs. Small-LLM vs. RL Agents in MetaDrive",
+            text="Top-down driving · Human, local LLM, and SAC agents",
             style="SubHeader.TLabel",
         )
         subtitle_lbl.pack(pady=4)
@@ -73,7 +76,7 @@ class DrivingLabApp:
         # Play Human Button
         btn_human = tk.Button(
             btn_frame,
-            text="👤 PLAY HUMAN DRIVER (Live 3D WASD)",
+            text="👤 DRIVE (2D keyboard)",
             bg="#A6E3A1",
             fg="#11111B",
             font=("Segoe UI", 11, "bold"),
@@ -86,7 +89,7 @@ class DrivingLabApp:
         # Watch RL Button
         btn_rl = tk.Button(
             btn_frame,
-            text="🤖 WATCH RL AGENT (SAC Policy Live 3D)",
+            text="🤖 WATCH RL AGENT (SAC)",
             bg="#89B4FA",
             fg="#11111B",
             font=("Segoe UI", 11, "bold"),
@@ -99,7 +102,7 @@ class DrivingLabApp:
         # Watch LLM Button
         btn_llm = tk.Button(
             btn_frame,
-            text="🧠 WATCH LLM AGENT (High-Level Planner Live 3D)",
+            text="🧠 WATCH LLM AGENT (local planner)",
             bg="#F9E2AF",
             fg="#11111B",
             font=("Segoe UI", 11, "bold"),
@@ -112,7 +115,7 @@ class DrivingLabApp:
         # Preview Scenario Button
         btn_preview = tk.Button(
             btn_frame,
-            text="👁️ PREVIEW SCENARIO ROAD GEOMETRY",
+            text="👁️ PREVIEW ROAD (free drive)",
             bg="#CBA6F7",
             fg="#11111B",
             font=("Segoe UI", 10, "bold"),
@@ -131,7 +134,7 @@ class DrivingLabApp:
 
         btn_batch = tk.Button(
             exp_frame,
-            text="📊 RUN 20-SEED BATCH BENCHMARK",
+            text="📊 RUN AGENT COMPARISON (5 seeds)",
             bg="#F38BA8",
             fg="#11111B",
             font=("Segoe UI", 10, "bold"),
@@ -154,7 +157,7 @@ class DrivingLabApp:
         # Footer Status Bar
         footer = tk.Frame(self.root, bg="#181825", height=30)
         footer.pack(fill="x", side="bottom")
-        self.status_lbl = tk.Label(footer, text="Ready. Select a mode and click PLAY to launch live 3D MetaDrive.", bg="#181825", fg="#A6ADC8", font=("Segoe UI", 9))
+        self.status_lbl = tk.Label(footer, text="Ready. Human controls: W/A/S/D or arrows; Space brakes.", bg="#181825", fg="#A6ADC8", font=("Segoe UI", 9))
         self.status_lbl.pack(pady=4)
 
     def _get_seed(self) -> int:
@@ -166,25 +169,25 @@ class DrivingLabApp:
 
     def _launch_agent(self, agent_type: str):
         seed = self._get_seed()
-        self.status_lbl.config(text=f"Launching MetaDrive 3D Window for {agent_type.upper()} on Seed {seed}...")
+        self.status_lbl.config(text=f"Launching 2D {agent_type.upper()} drive on seed {seed}...")
         cmd = [PYTHON_EXE, "run.py", "--agent", agent_type, "--seed", str(seed)]
-        subprocess.Popen(cmd, cwd=os.path.abspath("."))
+        subprocess.Popen(cmd, cwd=PROJECT_DIR)
 
     def _launch_preview(self):
         seed = self._get_seed()
-        self.status_lbl.config(text=f"Launching Scenario Preview for Seed {seed}...")
+        self.status_lbl.config(text=f"Launching 2D road preview for seed {seed}...")
         cmd = [PYTHON_EXE, "run.py", "--agent", "human", "--seed", str(seed)]
-        subprocess.Popen(cmd)
+        subprocess.Popen(cmd, cwd=PROJECT_DIR)
 
     def _launch_batch(self):
         self.status_lbl.config(text="Launching Batch Evaluation Benchmark across test seeds...")
-        cmd = [PYTHON_EXE, "evaluate.py", "--seeds", "test", "--count", "5"]
-        subprocess.Popen(cmd)
+        cmd = [PYTHON_EXE, "evaluate.py", "--seeds", "test", "--count", "5", "--agents", "llm,rl"]
+        subprocess.Popen(cmd, cwd=PROJECT_DIR)
 
     def _launch_analyze(self):
         self.status_lbl.config(text="Running statistical hypothesis testing and generating plots...")
         cmd = [PYTHON_EXE, "analyze.py"]
-        proc = subprocess.Popen(cmd)
+        proc = subprocess.Popen(cmd, cwd=PROJECT_DIR)
         proc.wait()
         messagebox.showinfo("Analysis Complete", "Statistical report CSVs and visual plots have been generated in results/")
         self.status_lbl.config(text="Analysis complete. Check results/ and results/plots/")

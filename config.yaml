@@ -1,12 +1,11 @@
 environment:
-  name: metadrive
+  backend: 2d
+  name: driving_2d
   seed: 2037
   render: false
-  use_render: false
-  manual_control: false
-  traffic_density: 0.1
+  lane_width_m: 3.5
+  route_length_m: 500
   target_speed_kmh: 40.0
-  max_episode_seconds: 180
   horizon: 1000
 
 rl:
@@ -40,7 +39,7 @@ llm:
 
 evaluation:
   target_speed_kmh: 40.0
-  max_episode_seconds: 180
+  horizon: 1000
   test_seeds_file: experiments/seeds/test_seeds.json
   train_seeds_file: experiments/seeds/train_seeds.json
   val_seeds_file: experiments/seeds/validation_seeds.json

@@ -5,13 +5,16 @@ from agents.base_agent import BaseAgent
 class HumanAgent(BaseAgent):
     """
     Playable Human Driver Agent.
-    Captures live keyboard inputs (W/A/S/D or Arrow keys) in MetaDrive 3D mode.
+    Captures live keyboard inputs from the 2D environment window.
     """
 
     def __init__(self):
         super().__init__(name="Human")
 
     def get_action(self, env: Any, obs: Any) -> Tuple[np.ndarray, Dict[str, Any]]:
+        if hasattr(env, "get_human_action"):
+            return env.get_human_action(), {"agent_type": "Human", "control_mode": "2d_keyboard"}
+
         steering = 0.0
         throttle_brake = 0.0
 

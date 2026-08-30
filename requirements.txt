@@ -1,11 +1,13 @@
-metadrive-simulator
-stable-baselines3
-gymnasium
-torch
-requests
-pyyaml
-pandas
-matplotlib
-scipy
-seaborn
-tqdm
+# Python 3.13 environment for the 2D simulator, SAC training, and analysis.
+numpy>=2.1
+gymnasium>=1.0,<2.0
+stable-baselines3>=2.8
+torch>=2.8
+PyYAML>=6.0
+requests>=2.32
+pandas>=2.2
+matplotlib>=3.9
+scipy>=1.14
+seaborn>=0.13
+tqdm>=4.66
+tensorboard>=2.18

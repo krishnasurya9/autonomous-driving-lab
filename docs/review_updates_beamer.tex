@@ -1,0 +1,310 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{Boadilla}
+\usecolortheme{dolphin}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamercolor{structure}{fg=blue!55!black}
+\setbeamercolor{alerted text}{fg=red!65!black}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+
+\title[Autonomous Driving Benchmarking]{Autonomous Driving Benchmarking}
+\subtitle{Review 1: Project Foundation and Review 2: Method and Experimental Setup}
+\date{Reviews 1 and 2}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Project overview}
+\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.22\textwidth} X}
+\toprule
+Project type & Reinforcement-learning project with an applied experimental comparison \\
+Research area & Autonomous driving and continuous control \\
+Primary method & Soft Actor-Critic (SAC) \\
+Baselines & Local language-model planner and human driver \\
+Formal project title & \textit{Autonomous Driving Benchmarking: A Seed-Matched Paired Evaluation of Reinforcement Learning, Large Language Models, and Human Baselines} \\
+\bottomrule
+\end{tabularx}
+\vspace{0.7em}
+The central goal is to develop and evaluate the RL policy. LLM and human driving provide comparison baselines.
+\end{frame}
+
+\begin{frame}{Motivation}
+\begin{itemize}
+  \item Autonomous driving requires an agent to balance lane keeping, speed, progress, and safety.
+  \item Reinforcement learning can learn continuous control through repeated interaction and reward feedback.
+  \item Language-model planners use a different decision process and can provide an interpretable baseline.
+  \item Human control provides a practical reference for interpreting simulated-agent performance.
+  \item Comparing agents on different scenarios makes it difficult to tell whether results come from the agent or scenario difficulty.
+\end{itemize}
+\begin{block}{Motivating idea}
+Evaluate the agents in one repeatable driving task with shared scenario seeds and common episode measures.
+\end{block}
+\end{frame}
+
+\begin{frame}{Problem statement}
+\begin{block}{Problem}
+Develop a continuous-control RL driving policy and assess its behavior relative to a local LLM planner and a human driver under matched scenario conditions.
+\end{block}
+\textbf{Main research question}
+\begin{quote}
+How does a trained SAC policy compare with a local LLM planner and a human driver on the same seeded driving scenarios?
+\end{quote}
+\textbf{Comparison dimensions}
+\begin{itemize}
+  \item Safety: collisions and road departures
+  \item Driving quality: lane and speed tracking, control smoothness
+  \item Task performance: route progress, completion, and time
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Objectives and scope}
+\begin{enumerate}
+  \item Formulate driving as a continuous-control reinforcement-learning task.
+  \item Train a SAC policy to maintain lane position, track target speed, and make safe progress.
+  \item Define LLM and human baselines that use the same driving task.
+  \item Record consistent state, action, and episode telemetry.
+  \item Compare agents on shared seeds using relevant measures.
+\end{enumerate}
+\vspace{0.5em}
+\textbf{Scope:} controlled simulated driving and agent comparison. Results are specific to the task and should not be presented as evidence of real-road driving ability.
+\end{frame}
+
+\begin{frame}{Literature review: reinforcement learning for control}
+\begin{block}{Soft Actor-Critic (SAC)}
+Haarnoja et al. (2018) introduce an off-policy maximum-entropy RL method for continuous action spaces.
+\end{block}
+\begin{itemize}
+  \item A replay buffer allows SAC to reuse past transitions.
+  \item The entropy term encourages exploration while optimizing expected reward.
+  \item Continuous actions fit steering and throttle/brake control.
+  \item This project uses SAC as its primary learning method.
+\end{itemize}
+\vspace{0.4em}
+\textbf{Design implication:} evaluate both task reward and driving measures such as safety, lane tracking, and speed error.
+\end{frame}
+
+\begin{frame}{Literature review: language models in planning}
+\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.22\textwidth} X X}
+\toprule
+Work & Main idea & Relevance to this project \\
+\midrule
+SayCan (Ahn et al., 2022) & Combines language-model planning with grounded low-level skills & Motivates separating semantic decisions from vehicle control \\
+GPT-Driver (Mao et al., 2023) & Frames motion planning as language generation & Connects language models with driving decisions \\
+LanguageMPC (Sha et al., 2023) & Integrates language-model decisions with model-predictive control & Motivates an LLM planner paired with a deterministic controller \\
+\bottomrule
+\end{tabularx}
+\vspace{0.7em}
+\textbf{Project baseline:} the LLM proposes a high-level maneuver; a low-level controller converts it to continuous actions. Its output and fallback status must be logged.
+\end{frame}
+
+\begin{frame}{Literature review: human baselines and fair comparison}
+\begin{columns}[T]
+\column{0.49\textwidth}
+\textbf{Human driving}
+\begin{itemize}
+  \item CARLA (Dosovitskiy et al., 2017) established a widely used autonomous-driving simulation platform.
+  \item A live human baseline can provide a direct reference within the same task.
+  \item Human trials need consistent instructions and scenario seeds.
+\end{itemize}
+\column{0.49\textwidth}
+\textbf{Paired evaluation}
+\begin{itemize}
+  \item Dem\v{s}ar (2006) discusses statistical comparisons across multiple datasets.
+  \item Matching scenario seeds controls for differences in scenario difficulty.
+  \item Analyze within-seed differences and report effect sizes and uncertainty.
+\end{itemize}
+\end{columns}
+\vspace{0.4em}
+These works inform the study design; they do not by themselves establish the project's novelty.
+\end{frame}
+
+\begin{frame}{Research gap and proposed contribution}
+\begin{block}{Working research gap}
+The project asks whether a small local LLM planner, a learned SAC policy, and a live human baseline can be compared fairly when they encounter the same seeded task and share evaluation measures.
+\end{block}
+\textbf{Proposed contribution}
+\begin{itemize}
+  \item A repeatable seeded driving task and common telemetry format
+  \item SAC as the primary learned continuous-control agent
+  \item LLM and human baselines evaluated under matched scenarios
+  \item Per-seed analysis of safety, tracking, smoothness, and task completion
+\end{itemize}
+\small Treat this as a project question until the literature review has checked the cited work and related benchmarks in sufficient depth.
+\end{frame}
+
+\begin{frame}{Review 1 summary}
+\begin{itemize}
+  \item The project is an RL study centered on training a SAC driving policy.
+  \item The comparison baselines are a local LLM planner and a human driver.
+  \item Shared scenario seeds and common measures are central to a fair comparison.
+  \item The literature motivates SAC, hierarchical language-model planning, human baselines, and paired evaluation.
+  \item The methodology uses SAC as the main learned controller and evaluates it alongside LLM and human baselines.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Review 2: system architecture}
+\small
+\begin{center}
+\begin{tabular}{c}
+\textbf{Seeded driving environment} \\
+$\downarrow$ \\
+\textbf{Shared observation} (speed, lane, heading, obstacle, progress, curvature) \\
+$\downarrow$ \\
+\textbf{Agent decision} (SAC / LLM planner / human driver) \\
+$\downarrow$ \\
+\textbf{Vehicle action} (steering and throttle/brake) \\
+$\downarrow$ \\
+\textbf{Telemetry and episode measures}
+\end{tabular}
+\end{center}
+\begin{itemize}
+  \item SAC produces continuous actions at each 20 Hz simulation step.
+  \item The LLM proposes a high-level maneuver at a configured 1 Hz; a deterministic controller converts it to continuous controls.
+  \item The human baseline uses keyboard control in the same task.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Review 2: SAC model and learning objective}
+\small
+\begin{block}{Primary method}
+Soft Actor-Critic is an off-policy, maximum-entropy algorithm for continuous actions. Its replay buffer reuses collected transitions during training.
+\end{block}
+\begin{columns}[T]
+\column{0.49\textwidth}
+\textbf{Observation}
+\begin{itemize}
+  \item Speed and target speed
+  \item Lane deviation and heading error
+  \item Obstacle distance and route progress
+  \item Road curvature
+\end{itemize}
+\column{0.49\textwidth}
+\textbf{Action}
+\begin{itemize}
+  \item Steering in $[-1,1]$
+  \item Throttle/brake in $[-1,1]$
+  \item Continuous control at each environment step
+\end{itemize}
+\end{columns}
+\vspace{0.3em}
+\textbf{Configured model:} MLP policy, learning rate $3\times10^{-4}$, replay buffer 50,000, batch size 256, discount factor $\gamma=0.99$.
+\end{frame}
+
+\begin{frame}{Review 2: reward design}
+\small
+The reward combines the task's driving objectives:
+\[
+R = w_p R_{progress} + w_l R_{lane} + w_v R_{speed}
+  + w_s R_{safety} + w_t R_{task} + w_c R_{control}
+\]
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.19\textwidth} X X}
+\toprule
+Component & Environment signal & Intended behavior \\
+\midrule
+Progress & Speed and route progress & Move toward the destination \\
+Lane keeping & Lane deviation and heading error & Stay near the lane center \\
+Speed tracking & Error from target speed & Maintain the desired speed \\
+Safety & Collision and road-departure penalties & Avoid unsafe termination \\
+Task completion & Destination reward & Complete the route \\
+Control & Steering penalty & Avoid excessive steering \\
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\begin{frame}{Review 2: experimental setup}
+\begin{columns}[T]
+\column{0.48\textwidth}
+\textbf{Driving task}
+\begin{itemize}
+  \item Lightweight top-down 2D road simulator
+  \item 20 Hz simulation with 40 km/h target speed
+  \item Generated obstacle and route-completion signal
+  \item Gymnasium environment interface
+\end{itemize}
+\column{0.48\textwidth}
+\textbf{Scenario seeds}
+\begin{itemize}
+  \item Training: 20 seeds, 1000--1019
+  \item Validation: 10 seeds, 1100--1109
+  \item Held-out test: 20 seeds, 2000--2019
+  \item Use the same held-out seeds for each agent
+\end{itemize}
+\end{columns}
+\vspace{0.4em}
+Keep test scenarios separate from model selection and tuning.
+\end{frame}
+
+\begin{frame}{Review 2: data collection and analysis workflow}
+\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{0.20\textwidth} X X}
+\toprule
+Stage & Project data or method & Review status \\
+\midrule
+Collection & Per-step JSON telemetry for seed, agent, state, action, termination, and LLM backend & Implemented; pilot volume is small \\
+Feature extraction & Speed, lane deviation, heading error, route progress, steering, and throttle/brake & Implemented \\
+Preprocessing & Validate fields and match episodes by seed before comparing agents & Full-dataset checks remain \\
+EDA & Metric summaries, trajectories, speed profiles, and SAC evaluation curve & Pipeline available; pilot only \\
+\bottomrule
+\end{tabularx}
+\vspace{0.6em}
+\textbf{Episode measures:} collision, road departure, completion, route progress, lane-deviation RMSE, speed-error MAE, steering smoothness, and LLM latency/fallback status.
+\end{frame}
+
+\begin{frame}{Review 2: comparison plan and current evidence}
+\begin{columns}[T]
+\column{0.49\textwidth}
+\textbf{Analysis plan}
+\begin{itemize}
+  \item Match records by scenario seed.
+  \item Compare within-seed outcomes.
+  \item Use paired $t$-tests or Wilcoxon tests where appropriate.
+  \item Report sample counts, effect sizes, and uncertainty.
+\end{itemize}
+\column{0.49\textwidth}
+\textbf{Pilot status}
+\begin{itemize}
+  \item SAC trained for 5,000 steps.
+  \item Validation reward: $886.61 \pm 472.52$ over five episodes.
+  \item One 80-step matched smoke pair on seed 2003 ended at the time limit without collision.
+  \item Ollama was unavailable; no human run has been collected.
+\end{itemize}
+\end{columns}
+\begin{alertblock}{Evidence limit}
+The pilot is too small and variable to support conclusions about which agent performs best.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Combined review takeaways}
+\begin{itemize}
+  \item Review 1 defines the RL problem, objectives, literature basis, and comparison question.
+  \item Review 2 specifies the SAC controller, observation and action spaces, reward, and experiment design.
+  \item The study compares SAC with LLM and human baselines under matched scenario conditions.
+  \item The next work is to extend training, complete baseline runs, validate the full telemetry, and analyze held-out scenarios.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+\small
+\begin{enumerate}
+  \item Haarnoja, T., Zhou, A., Abbeel, P., \& Levine, S. (2018). Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor. ICML.
+  \item Ahn, M. et al. (2022). Do As I Can, Not As I Say: Grounding Language in Robotic Affordances. arXiv:2204.01691.
+  \item Mao, J. et al. (2023). GPT-Driver: Learning to Drive with GPT. arXiv:2310.01415.
+  \item Sha, H. et al. (2023). LanguageMPC: Large Language Models as Decision Makers for Autonomous Driving. arXiv:2310.03026.
+  \item Dosovitskiy, A. et al. (2017). CARLA: An Open Urban Driving Simulator. CoRL.
+  \item Dem\v{s}ar, J. (2006). Statistical Comparisons of Classifiers over Multiple Data Sets. \textit{Journal of Machine Learning Research}, 7, 1--30.
+\end{enumerate}
+\vspace{0.3em}
+Verify the bibliographic details and the project's research-gap claim against the original sources before final submission.
+\end{frame}
+
+\end{document}
+
