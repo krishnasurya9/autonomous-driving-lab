@@ -1,0 +1,11 @@
+metadrive-simulator
+stable-baselines3
+gymnasium
+torch
+requests
+pyyaml
+pandas
+matplotlib
+scipy
+seaborn
+tqdm
