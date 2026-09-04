@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Secrets
+.env
+.env.*
+*.pem
+credentials.json
+
+# Generated experiment outputs
+telemetry/
+recordings/
+results/
+rl/checkpoints/
+debug-*.log
+
+# Accidental nested copy
+3/
