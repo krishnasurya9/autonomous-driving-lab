@@ -21,11 +21,13 @@ Thumbs.db
 *.pem
 credentials.json
 
-# Generated experiment outputs
-telemetry/
+# Generated experiment outputs (keep telemetry Python package in git)
+telemetry/*.json
+telemetry/**/__pycache__/
 recordings/
 results/
 rl/checkpoints/
+rl/tensorboard_logs/
 debug-*.log
 
 # Accidental nested copy
