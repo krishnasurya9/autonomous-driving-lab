@@ -1,41 +1,51 @@
-"""Episode metrics for both the legacy and the current flat telemetry schema."""
-
 import json
-from typing import Any, Dict
-
 import numpy as np
-
+from typing import Dict, Any, List
 
 def compute_episode_metrics(telemetry_file_path: str) -> Dict[str, Any]:
-    with open(telemetry_file_path, "r", encoding="utf-8") as stream:
-        data = json.load(stream)
+    """Computes comprehensive evaluation metrics from a telemetry JSON file."""
+    with open(telemetry_file_path, "r") as f:
+        data = json.load(f)
 
     meta = data.get("experiment_metadata", data)
     summary = data.get("summary_metrics", data)
-    series = data.get("time_series_telemetry", data.get("steps", [])) or []
-    target_speed = float(meta.get("target_speed_kmh", 40.0))
-    speeds = [float(step.get("speed_kmh", 0.0)) for step in series]
-    lanes = [float(step.get("lane_deviation_m", 0.0)) for step in series]
-    steering = [float(step.get("steering", 0.0)) for step in series]
+    series = data.get("time_series_telemetry", data.get("steps", []))
 
-    rmse_lane = float(np.sqrt(np.mean(np.square(lanes)))) if lanes else 0.0
-    mae_speed = float(np.mean(np.abs(np.asarray(speeds) - target_speed))) if speeds else 0.0
-    steer_smoothness = float(np.mean(np.abs(np.diff(steering)))) if len(steering) > 1 else 0.0
-    steps = len(series)
-    return {
-        "scenario_id": meta.get("scenario_id", f"SCENARIO_{meta.get('seed', 'unknown')}"),
-        "seed": meta.get("seed"),
-        "agent_type": str(meta.get("agent_type", "unknown")).lower(),
-        "agent_policies": summary.get("agent_policies", []),
-        "task_completed": bool(summary.get("task_completed", False)),
-        "completion_time_sec": float(summary.get("completion_time_sec", steps * 0.05)),
-        "terminated_reason": summary.get("terminated_reason"),
-        "total_collisions": int(summary.get("total_collisions", summary.get("collisions", 0))),
-        "off_road_events": int(summary.get("off_road_events", 1 if summary.get("off_road") else 0)),
+    if not series:
+        return summary
+
+    target_speed = meta.get("target_speed_kmh", 40.0)
+    steer_actions = [s.get("steering", 0.0) for s in series]
+    speeds = [s.get("speed_kmh", 0.0) for s in series]
+    lane_devs = [s.get("lane_deviation_m", 0.0) for s in series]
+
+    # RMSE Lane Deviation
+    rmse_lane = float(np.sqrt(np.mean(np.square(lane_devs))))
+
+    # MAE Speed Error
+    mae_speed = float(np.mean([abs(v - target_speed) for v in speeds]))
+
+    # Steering Smoothness J_steering = (1 / (T-1)) * sum(|u_{t+1} - u_t|)
+    if len(steer_actions) > 1:
+        steer_diffs = np.abs(np.diff(steer_actions))
+        j_steering = float(np.mean(steer_diffs))
+    else:
+        j_steering = 0.0
+
+    metrics = {
+        "scenario_id": meta["scenario_id"],
+        "seed": meta["seed"],
+        "agent_type": meta["agent_type"],
+        "task_completed": summary.get("task_completed", False),
+        "completion_time_sec": summary.get("completion_time_sec", len(series) * 0.02),
+        "total_collisions": summary.get("total_collisions", summary.get("collisions", 0)),
+        "off_road_events": summary.get("off_road_events", 1 if summary.get("off_road") else 0),
         "rmse_lane_deviation_m": round(rmse_lane, 4),
         "mae_speed_error_kmh": round(mae_speed, 4),
-        "control_smoothness_steering": round(steer_smoothness, 4),
-        "avg_speed_kmh": round(float(np.mean(speeds)), 2) if speeds else 0.0,
-        "avg_decision_latency_sec": float(summary.get("avg_decision_latency_sec", 0.0)),
-        "invalid_llm_outputs": int(summary.get("invalid_llm_outputs", 0)),
+        "control_smoothness_steering": round(j_steering, 4),
+        "avg_speed_kmh": round(float(np.mean(speeds)), 2),
+        "avg_decision_latency_sec": summary.get("avg_decision_latency_sec", 0.0),
+        "invalid_llm_outputs": summary.get("invalid_llm_outputs", 0),
     }
+
+    return metrics

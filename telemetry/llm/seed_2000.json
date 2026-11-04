@@ -1,0 +1,2379 @@
+{
+  "experiment_metadata": {
+    "scenario_id": "SCENARIO_2000",
+    "seed": 2000,
+    "agent_type": "LLM",
+    "trial_id": "2000_L_01",
+    "difficulty": "moderate",
+    "target_speed_kmh": 40.0
+  },
+  "summary_metrics": {
+    "task_completed": false,
+    "completion_time_sec": 12.5,
+    "total_collisions": 1,
+    "off_road_events": 0,
+    "rmse_lane_deviation_m": 0.0,
+    "mae_speed_error_kmh": 40.0,
+    "avg_decision_latency_sec": 0.0,
+    "invalid_llm_outputs": 0,
+    "total_steps": 124
+  },
+  "time_series_telemetry": [
+    {
+      "step": 0,
+      "timestamp": 4.0945,
+      "pos_x": 5.0,
+      "pos_y": 7.0,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 1,
+      "timestamp": 4.0956,
+      "pos_x": 5.0,
+      "pos_y": 7.0,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 2,
+      "timestamp": 4.0965,
+      "pos_x": 5.0,
+      "pos_y": 7.0,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 3,
+      "timestamp": 4.0975,
+      "pos_x": 5.0,
+      "pos_y": 7.0,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 4,
+      "timestamp": 4.0984,
+      "pos_x": 5.001,
+      "pos_y": 7.0,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 5,
+      "timestamp": 4.0995,
+      "pos_x": 5.025,
+      "pos_y": 7.0,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 6,
+      "timestamp": 4.1005,
+      "pos_x": 5.032,
+      "pos_y": 6.998,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 7,
+      "timestamp": 4.1015,
+      "pos_x": 5.04,
+      "pos_y": 6.993,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 8,
+      "timestamp": 4.1026,
+      "pos_x": 5.081,
+      "pos_y": 6.992,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 9,
+      "timestamp": 4.1035,
+      "pos_x": 5.151,
+      "pos_y": 6.992,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 10,
+      "timestamp": 4.1044,
+      "pos_x": 5.25,
+      "pos_y": 6.992,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 11,
+      "timestamp": 4.1054,
+      "pos_x": 5.379,
+      "pos_y": 6.992,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 12,
+      "timestamp": 4.1066,
+      "pos_x": 5.537,
+      "pos_y": 6.992,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 13,
+      "timestamp": 4.1078,
+      "pos_x": 5.724,
+      "pos_y": 6.989,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 14,
+      "timestamp": 4.109,
+      "pos_x": 5.941,
+      "pos_y": 6.986,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 15,
+      "timestamp": 4.1102,
+      "pos_x": 6.187,
+      "pos_y": 6.984,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 16,
+      "timestamp": 4.1113,
+      "pos_x": 6.462,
+      "pos_y": 6.983,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 17,
+      "timestamp": 4.1125,
+      "pos_x": 6.767,
+      "pos_y": 6.982,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 18,
+      "timestamp": 4.1136,
+      "pos_x": 7.101,
+      "pos_y": 6.982,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 19,
+      "timestamp": 4.1146,
+      "pos_x": 7.464,
+      "pos_y": 6.982,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 20,
+      "timestamp": 4.1156,
+      "pos_x": 7.857,
+      "pos_y": 6.981,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 21,
+      "timestamp": 4.1166,
+      "pos_x": 8.278,
+      "pos_y": 6.981,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 22,
+      "timestamp": 4.1176,
+      "pos_x": 8.73,
+      "pos_y": 6.98,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 23,
+      "timestamp": 4.1186,
+      "pos_x": 9.21,
+      "pos_y": 6.98,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 24,
+      "timestamp": 4.1197,
+      "pos_x": 9.72,
+      "pos_y": 6.979,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 25,
+      "timestamp": 4.1208,
+      "pos_x": 10.259,
+      "pos_y": 6.978,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 26,
+      "timestamp": 4.1228,
+      "pos_x": 10.828,
+      "pos_y": 6.978,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 27,
+      "timestamp": 4.1245,
+      "pos_x": 11.426,
+      "pos_y": 6.977,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 28,
+      "timestamp": 4.1265,
+      "pos_x": 12.053,
+      "pos_y": 6.976,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 29,
+      "timestamp": 4.1288,
+      "pos_x": 12.709,
+      "pos_y": 6.976,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 30,
+      "timestamp": 4.1317,
+      "pos_x": 13.395,
+      "pos_y": 6.975,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 31,
+      "timestamp": 4.1338,
+      "pos_x": 14.11,
+      "pos_y": 6.974,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 32,
+      "timestamp": 4.1356,
+      "pos_x": 14.855,
+      "pos_y": 6.973,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 33,
+      "timestamp": 4.1376,
+      "pos_x": 15.629,
+      "pos_y": 6.972,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 34,
+      "timestamp": 4.1394,
+      "pos_x": 16.432,
+      "pos_y": 6.971,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 35,
+      "timestamp": 4.1411,
+      "pos_x": 17.264,
+      "pos_y": 6.97,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 36,
+      "timestamp": 4.1436,
+      "pos_x": 18.126,
+      "pos_y": 6.969,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 37,
+      "timestamp": 4.1457,
+      "pos_x": 19.017,
+      "pos_y": 6.968,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 38,
+      "timestamp": 4.1473,
+      "pos_x": 19.937,
+      "pos_y": 6.967,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 39,
+      "timestamp": 4.1491,
+      "pos_x": 20.887,
+      "pos_y": 6.966,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 40,
+      "timestamp": 4.1513,
+      "pos_x": 21.866,
+      "pos_y": 6.965,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 41,
+      "timestamp": 4.1534,
+      "pos_x": 22.875,
+      "pos_y": 6.964,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 42,
+      "timestamp": 4.1552,
+      "pos_x": 23.912,
+      "pos_y": 6.963,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 43,
+      "timestamp": 4.1575,
+      "pos_x": 24.979,
+      "pos_y": 6.962,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 44,
+      "timestamp": 4.1598,
+      "pos_x": 26.076,
+      "pos_y": 6.96,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 45,
+      "timestamp": 4.1617,
+      "pos_x": 27.201,
+      "pos_y": 6.959,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 46,
+      "timestamp": 4.1635,
+      "pos_x": 28.356,
+      "pos_y": 6.958,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 47,
+      "timestamp": 4.1651,
+      "pos_x": 29.541,
+      "pos_y": 6.956,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 48,
+      "timestamp": 4.1666,
+      "pos_x": 30.754,
+      "pos_y": 6.955,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 49,
+      "timestamp": 4.1683,
+      "pos_x": 31.997,
+      "pos_y": 6.954,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.9604644775390625e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 50,
+      "timestamp": 8.2561,
+      "pos_x": 33.27,
+      "pos_y": 6.952,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 51,
+      "timestamp": 8.2576,
+      "pos_x": 34.571,
+      "pos_y": 6.951,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 52,
+      "timestamp": 8.2592,
+      "pos_x": 35.902,
+      "pos_y": 6.949,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 53,
+      "timestamp": 8.2607,
+      "pos_x": 37.262,
+      "pos_y": 6.948,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 54,
+      "timestamp": 8.2624,
+      "pos_x": 38.652,
+      "pos_y": 6.946,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 55,
+      "timestamp": 8.2639,
+      "pos_x": 40.071,
+      "pos_y": 6.944,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 56,
+      "timestamp": 8.2656,
+      "pos_x": 41.519,
+      "pos_y": 6.943,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 57,
+      "timestamp": 8.2675,
+      "pos_x": 42.997,
+      "pos_y": 6.941,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 58,
+      "timestamp": 8.2694,
+      "pos_x": 44.504,
+      "pos_y": 6.939,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 59,
+      "timestamp": 8.2711,
+      "pos_x": 46.04,
+      "pos_y": 6.938,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 60,
+      "timestamp": 8.2732,
+      "pos_x": 47.605,
+      "pos_y": 6.936,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 61,
+      "timestamp": 8.2748,
+      "pos_x": 49.2,
+      "pos_y": 6.934,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 62,
+      "timestamp": 8.2763,
+      "pos_x": 50.824,
+      "pos_y": 6.932,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 63,
+      "timestamp": 8.2778,
+      "pos_x": 52.478,
+      "pos_y": 6.93,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 64,
+      "timestamp": 8.2794,
+      "pos_x": 54.161,
+      "pos_y": 6.928,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 65,
+      "timestamp": 8.2812,
+      "pos_x": 55.873,
+      "pos_y": 6.926,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 66,
+      "timestamp": 8.283,
+      "pos_x": 57.614,
+      "pos_y": 6.924,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 67,
+      "timestamp": 8.2851,
+      "pos_x": 59.385,
+      "pos_y": 6.922,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 68,
+      "timestamp": 8.287,
+      "pos_x": 61.185,
+      "pos_y": 6.92,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 69,
+      "timestamp": 8.2887,
+      "pos_x": 63.015,
+      "pos_y": 6.918,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 70,
+      "timestamp": 8.2903,
+      "pos_x": 64.873,
+      "pos_y": 6.916,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 71,
+      "timestamp": 8.2918,
+      "pos_x": 66.761,
+      "pos_y": 6.914,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 72,
+      "timestamp": 8.2935,
+      "pos_x": 68.679,
+      "pos_y": 6.912,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 73,
+      "timestamp": 8.2951,
+      "pos_x": 70.626,
+      "pos_y": 6.91,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 74,
+      "timestamp": 8.2965,
+      "pos_x": 72.602,
+      "pos_y": 6.907,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 75,
+      "timestamp": 8.2979,
+      "pos_x": 74.607,
+      "pos_y": 6.905,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 76,
+      "timestamp": 8.2997,
+      "pos_x": 76.642,
+      "pos_y": 6.903,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 77,
+      "timestamp": 8.3014,
+      "pos_x": 78.706,
+      "pos_y": 6.9,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 78,
+      "timestamp": 8.3029,
+      "pos_x": 80.799,
+      "pos_y": 6.898,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 79,
+      "timestamp": 8.3044,
+      "pos_x": 82.922,
+      "pos_y": 6.895,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 80,
+      "timestamp": 8.3059,
+      "pos_x": 85.074,
+      "pos_y": 6.893,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 81,
+      "timestamp": 8.3077,
+      "pos_x": 87.255,
+      "pos_y": 6.891,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 82,
+      "timestamp": 8.3099,
+      "pos_x": 89.466,
+      "pos_y": 6.888,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 83,
+      "timestamp": 8.3117,
+      "pos_x": 91.698,
+      "pos_y": 6.885,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 84,
+      "timestamp": 8.3136,
+      "pos_x": 93.928,
+      "pos_y": 6.883,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 85,
+      "timestamp": 8.3159,
+      "pos_x": 96.154,
+      "pos_y": 6.88,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 86,
+      "timestamp": 8.3178,
+      "pos_x": 98.376,
+      "pos_y": 6.878,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 87,
+      "timestamp": 8.3195,
+      "pos_x": 100.603,
+      "pos_y": 6.875,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 88,
+      "timestamp": 8.3215,
+      "pos_x": 102.85,
+      "pos_y": 6.873,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 89,
+      "timestamp": 8.324,
+      "pos_x": 105.094,
+      "pos_y": 6.87,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 90,
+      "timestamp": 8.3257,
+      "pos_x": 107.335,
+      "pos_y": 6.868,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 91,
+      "timestamp": 8.3275,
+      "pos_x": 109.572,
+      "pos_y": 6.865,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 92,
+      "timestamp": 8.3298,
+      "pos_x": 111.806,
+      "pos_y": 6.863,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 93,
+      "timestamp": 8.3318,
+      "pos_x": 114.036,
+      "pos_y": 6.86,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 94,
+      "timestamp": 8.3334,
+      "pos_x": 116.262,
+      "pos_y": 6.857,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 95,
+      "timestamp": 8.3353,
+      "pos_x": 118.485,
+      "pos_y": 6.855,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 96,
+      "timestamp": 8.3374,
+      "pos_x": 120.712,
+      "pos_y": 6.852,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 97,
+      "timestamp": 8.3391,
+      "pos_x": 122.959,
+      "pos_y": 6.85,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 98,
+      "timestamp": 8.3406,
+      "pos_x": 125.204,
+      "pos_y": 6.847,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 99,
+      "timestamp": 8.3425,
+      "pos_x": 127.445,
+      "pos_y": 6.845,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 5.4836273193359375e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 100,
+      "timestamp": 12.4626,
+      "pos_x": 129.683,
+      "pos_y": 6.842,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 101,
+      "timestamp": 12.4647,
+      "pos_x": 131.916,
+      "pos_y": 6.84,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 102,
+      "timestamp": 12.4662,
+      "pos_x": 134.147,
+      "pos_y": 6.837,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 103,
+      "timestamp": 12.4677,
+      "pos_x": 136.373,
+      "pos_y": 6.835,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 104,
+      "timestamp": 12.4693,
+      "pos_x": 138.596,
+      "pos_y": 6.832,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 105,
+      "timestamp": 12.4713,
+      "pos_x": 140.823,
+      "pos_y": 6.83,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 106,
+      "timestamp": 12.4728,
+      "pos_x": 143.071,
+      "pos_y": 6.827,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 107,
+      "timestamp": 12.4742,
+      "pos_x": 145.316,
+      "pos_y": 6.824,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 108,
+      "timestamp": 12.4757,
+      "pos_x": 147.557,
+      "pos_y": 6.822,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 109,
+      "timestamp": 12.4771,
+      "pos_x": 149.795,
+      "pos_y": 6.819,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 110,
+      "timestamp": 12.4787,
+      "pos_x": 152.029,
+      "pos_y": 6.817,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 111,
+      "timestamp": 12.4803,
+      "pos_x": 154.259,
+      "pos_y": 6.814,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 112,
+      "timestamp": 12.4819,
+      "pos_x": 156.486,
+      "pos_y": 6.812,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 113,
+      "timestamp": 12.4835,
+      "pos_x": 158.709,
+      "pos_y": 6.809,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 114,
+      "timestamp": 12.485,
+      "pos_x": 160.937,
+      "pos_y": 6.807,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 115,
+      "timestamp": 12.4866,
+      "pos_x": 163.184,
+      "pos_y": 6.804,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 116,
+      "timestamp": 12.4882,
+      "pos_x": 165.43,
+      "pos_y": 6.802,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 117,
+      "timestamp": 12.4901,
+      "pos_x": 167.671,
+      "pos_y": 6.799,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 118,
+      "timestamp": 12.4926,
+      "pos_x": 169.909,
+      "pos_y": 6.797,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 119,
+      "timestamp": 12.4951,
+      "pos_x": 172.144,
+      "pos_y": 6.794,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 120,
+      "timestamp": 12.497,
+      "pos_x": 174.374,
+      "pos_y": 6.791,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 121,
+      "timestamp": 12.4992,
+      "pos_x": 176.601,
+      "pos_y": 6.789,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 122,
+      "timestamp": 12.5012,
+      "pos_x": 178.825,
+      "pos_y": 6.786,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    },
+    {
+      "step": 123,
+      "timestamp": 12.5031,
+      "pos_x": 180.549,
+      "pos_y": 6.871,
+      "speed_kmh": 0.0,
+      "steering": -0.0,
+      "throttle": 1.0,
+      "brake": 0.0,
+      "lane_deviation_m": 0.0,
+      "heading_error_deg": 0.0,
+      "llm_decision": {
+        "target_speed_kmh": 40.0,
+        "maneuver": "MAINTAIN",
+        "lane_target": "CENTER"
+      },
+      "llm_latency_sec": 4.76837158203125e-06,
+      "llm_invalid_output": false
+    }
+  ]
+}

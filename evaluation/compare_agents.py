@@ -11,7 +11,7 @@ from evaluation.metrics import compute_episode_metrics
 from evaluation.statistical_tests import run_paired_tests
 
 def compare_telemetry_results(
-    telemetry_dir: str = "telemetry_2d",
+    telemetry_dir: str = "telemetry",
     output_results_dir: str = "results",
 ) -> Dict[str, Any]:
     """Reads telemetry for Human, LLM, and RL, matches seeds, computes paired statistics."""
@@ -21,14 +21,11 @@ def compare_telemetry_results(
     results_by_agent: Dict[str, Dict[int, Dict[str, Any]]] = {a: {} for a in agents}
 
     for agent in agents:
-        # Current 2D runs use flat names; the nested path remains for older logs.
+        # Match files like telemetry/HUMAN_SCENARIO_2000_1788093852.json
         json_files = glob.glob(os.path.join(telemetry_dir, f"{agent.upper()}_SCENARIO_*.json"))
-        json_files += glob.glob(os.path.join(telemetry_dir, agent, "seed_*.json"))
         for fpath in json_files:
             metrics = compute_episode_metrics(fpath)
             seed = metrics["seed"]
-            if seed is None:
-                continue
             results_by_agent[agent][seed] = metrics
 
     # Find common seeds across agents
