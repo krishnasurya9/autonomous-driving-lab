@@ -1,60 +1,79 @@
-# Autonomous Driving Lab — 2D
+# 🏎️ Autonomous Driving Lab (Human vs. Small-LLM vs. RL in MetaDrive)
 
-A small top-down driving simulator for comparing a human driver, a local LLM planner, and a SAC policy. The simulator is now a deterministic, seeded 2D Gymnasium environment; it does not import or require MetaDrive, Panda3D, or pygame.
+An interactive, live 3D driving simulator and controlled research benchmark for comparing **Human Drivers**, **Small Local LLM Planners**, and **Reinforcement Learning (SAC)** continuous-control agents in procedurally generated MetaDrive scenarios.
 
-## Current setup
+---
 
-- Project folder: `A:\MSC\sem 3\Rl\project`
-- Requested Python environment: `A:\envs\metadrive_env`
-- Environment interpreter: `A:\envs\metadrive_env\Scripts\python.exe` (Python 3.13.2)
-- The project's dependencies have been installed into the supplied environment; `pip check` reports no broken requirements. `setup_environment.ps1` reproduces that setup later.
+## 🚀 Launch the Driving Lab Interface
 
-From PowerShell, in the project folder:
+The primary user experience is a live 3D driving game launcher. Run:
 
-```powershell
-.\setup_environment.ps1
-$env:PYTHON = 'A:\envs\metadrive_env\Scripts\python.exe'
-& $env:PYTHON app.py
+```bash
+python app.py
 ```
 
-The launcher honors `$env:PYTHON`; otherwise it uses the requested environment path when present, then the Python interpreter running the launcher.
+This launches the GUI Lab Interface:
 
-## Driving
-
-```powershell
-& $env:PYTHON run.py --agent human --seed 2037
-& $env:PYTHON run.py --agent llm --seed 2037
-& $env:PYTHON run.py --agent rl --seed 2037
-& $env:PYTHON test_feasibility.py
+```text
+╔══════════════════════════════════════════════════════════════════╗
+║                    🏎️ AUTONOMOUS DRIVING LAB                     ║
+╠══════════════════════════════════════════════════════════════════╣
+║                                                                  ║
+║  Scenario Seed:  [ 2037 ]                                        ║
+║                                                                  ║
+║  [ 👤 PLAY HUMAN DRIVER (Live 3D WASD) ]                        ║
+║  [ 🤖 WATCH RL AGENT (SAC Policy Live 3D) ]                      ║
+║  [ 🧠 WATCH LLM AGENT (High-Level Planner Live 3D) ]             ║
+║  [ 👁️ PREVIEW SCENARIO ROAD GEOMETRY ]                          ║
+║                                                                  ║
+║  [ 📊 RUN 20-SEED BATCH BENCHMARK ]                              ║
+║  [ 📈 ANALYZE STATISTICS & PLOTS ]                               ║
+╚══════════════════════════════════════════════════════════════════╝
 ```
 
-Human controls: **W/↑** accelerate, **S/↓/Space** brake, **A/←** and **D/→** steer, **Esc** closes the episode. The orange marker is a seeded obstacle. RL starts with a controller fallback until a 2D SAC checkpoint exists.
+---
 
-## Train and compare
+## 🎮 Driving Modes & Controls
 
-```powershell
-& $env:PYTHON train.py --algorithm sac --timesteps 50000
-& $env:PYTHON evaluate.py --seeds test --count 5 --agents llm,rl
-& $env:PYTHON analyze.py
+### 👤 1. Playable Human Mode (`PLAY HUMAN`)
+- **WASD / Arrow Keys**: Interactive real-time steering, acceleration, and braking.
+- **Spacebar**: Emergency stop / Handbrake.
+- **`C` Key**: Toggle Camera view (Third-person chase camera, top-down view).
+- **`ESC` Key**: Exit driving session.
+
+### 🤖 2. Watch RL Agent (`WATCH RL`)
+- Watch the trained continuous-control **SAC policy** navigate the procedural road geometry live on screen in 3D.
+
+### 🧠 3. Watch LLM Agent (`WATCH LLM`)
+- Watch the hierarchical **LLM High-Level Planner** (~1 Hz) and deterministic **Low-Level Controller** (50 Hz) guide the vehicle live on screen in 3D.
+
+### 📺 4. Live On-Screen HUD Overlay
+Every 3D driving mode displays a real-time HUD with telemetry:
+- Current Speed vs. Target Speed (km/h)
+- Lane Deviation (m) & Heading Error (deg)
+- High-Level Maneuver / LLM Decision
+- Route Completion Progress (%)
+- Collision Count
+
+---
+
+## 💻 CLI & Batch Benchmark Reference
+
+```bash
+# 1. Verify environment & seed reproducibility
+python test_feasibility.py
+
+# 2. Single-Agent Live 3D Launch
+python run.py --agent human --seed 2037
+python run.py --agent llm --seed 2037
+python run.py --agent rl --seed 2037
+
+# 3. Train RL (SAC) policy on training seeds (1000..1099)
+python train.py --algorithm sac --timesteps 10000
+
+# 4. Run 20-seed matched evaluation benchmark
+python evaluate.py --seeds test --count 20
+
+# 5. Generate statistical summary tables and visualization plots
+python analyze.py
 ```
-
-Training writes `rl/checkpoints/sac_2d.zip`. Human episodes are interactive and should be run separately; headless comparisons default to LLM and RL. The LLM requires Ollama at `http://localhost:11434` with the configured model available. If no model responds, the agent uses its rule-based fallback; do not label those runs as LLM inference.
-
-The 2D environment preserves the existing 7-value observation and 2-value action shape. It models speed, steering, lane position, road curvature, one seeded obstacle, off-road termination, and route completion. It is a lightweight prototype for agent/controller work, not a replacement for MetaDrive's traffic or 3D physics. Old MetaDrive checkpoints and telemetry are not valid 2D experiment results. New episodes are stored separately under `telemetry_2d/`.
-
-## Main files
-
-- `environment/driving_2d_env.py` — 2D road, vehicle dynamics, keyboard window, reward/termination signals
-- `environment/metadrive_env.py` — compatibility import for scripts using the old class name
-- `agents/` and `controller/` — human, LLM, SAC, and low-level control
-- `experiments/run_comparison.py` — run episodes and write telemetry
-- `rl/train_sac.py` — SAC training and evaluation callbacks
-- `evaluation/` and `visualization/` — metrics and plots
-- `setup_environment.ps1` / `requirements.txt` — setup for the supplied Python environment
-
-## Known next steps
-
-1. Run a short human episode and short RL training run, then inspect the new 2D telemetry and policy behavior.
-2. Start Ollama and verify one real model decision before treating any LLM episode as a model result.
-3. Add 2D video export if recordings are needed; the existing `--video` option currently reports that export is not configured.
-4. Collect the full seed-matched comparison only after the interactive, RL, and real LLM paths have been checked. Historical CSVs and MetaDrive logs must not be mixed with 2D results.
