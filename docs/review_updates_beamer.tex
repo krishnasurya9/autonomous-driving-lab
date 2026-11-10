@@ -272,10 +272,10 @@ EDA & Metric summaries, trajectories, speed profiles, and SAC evaluation curve &
 \column{0.49\textwidth}
 \textbf{Pilot status}
 \begin{itemize}
-  \item SAC trained for 5,000 steps.
-  \item Validation reward: $886.61 \pm 472.52$ over five episodes.
-  \item One 80-step matched smoke pair on seed 2003 ended at the time limit without collision.
-  \item Ollama was unavailable; no human run has been collected.
+  \item The active 8-value SAC policy was trained for 50,000 steps and completed all 20 comparison routes.
+  \item SAC had no collisions or road departures, but averaged about 86 km/h against the 40 km/h target.
+  \item LM Studio returned a real planner decision in a development-seed smoke run.
+  \item Held-out human and real-LLM episodes have not been collected; live keyboard driving still needs a final hands-on check.
 \end{itemize}
 \end{columns}
 \begin{alertblock}{Evidence limit}

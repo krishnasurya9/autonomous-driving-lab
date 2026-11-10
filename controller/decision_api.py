@@ -24,6 +24,8 @@ VALID_MANEUVERS = {
     MANEUVER_STOP,
 }
 
+VALID_LANE_TARGETS = {"CENTER", "LEFT", "RIGHT"}
+
 @dataclass
 class HighLevelDecision:
     """Standardized high-level decision structure across agents."""
@@ -46,6 +48,8 @@ class HighLevelDecision:
             target_speed = 40.0
 
         lane_target = str(d.get("lane_target", "CENTER")).upper()
+        if lane_target not in VALID_LANE_TARGETS:
+            lane_target = "CENTER"
         return cls(
             target_speed_kmh=target_speed,
             maneuver=maneuver,

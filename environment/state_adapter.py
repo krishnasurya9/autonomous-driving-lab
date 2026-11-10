@@ -16,6 +16,7 @@ class DrivingState:
     obstacle_distance: float     # meters
     route_progress: float        # ratio [0.0, 1.0]
     distance_to_goal: float      # meters
+    obstacle_lateral_offset_m: float = 0.0
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -29,7 +30,8 @@ class DrivingState:
             f"- Road Curvature: {self.road_curvature}\n"
             f"- Upcoming Maneuver: {self.upcoming_maneuver} (in {self.distance_to_maneuver:.1f} m)\n"
             f"- Obstacle Present: {'YES' if self.obstacle_present else 'NONE'} "
-            f"(Distance: {self.obstacle_distance:.1f} m)\n"
+            f"(Distance: {self.obstacle_distance:.1f} m, "
+            f"lateral offset: {self.obstacle_lateral_offset_m:+.2f} m)\n"
             f"- Route Progress: {self.route_progress * 100:.1f}% (Distance to Goal: {self.distance_to_goal:.1f} m)"
         )
 
@@ -88,9 +90,16 @@ class StateAdapter:
                 surrounding = vehicle.lidar.get_surrounding_vehicles() if hasattr(vehicle, "lidar") else []
                 obstacle_present = len(surrounding) > 0
                 obstacle_distance = float(surrounding[0].distance) if obstacle_present else 100.0
+                obstacle_lateral_offset_m = 0.0
+                if obstacle_present and getattr(vehicle, "lane", None) is not None:
+                    obstacle_pos = getattr(surrounding[0], "position", None)
+                    if obstacle_pos is not None:
+                        _long, obstacle_lateral_offset_m = vehicle.lane.local_coordinates(obstacle_pos)
+                        obstacle_lateral_offset_m = float(obstacle_lateral_offset_m)
             except Exception:
                 obstacle_present = False
                 obstacle_distance = 100.0
+                obstacle_lateral_offset_m = 0.0
 
             # Curvature estimation
             road_curvature = "STRAIGHT"
@@ -121,6 +130,7 @@ class StateAdapter:
             distance_to_maneuver = 50.0
             obstacle_present = False
             obstacle_distance = 100.0
+            obstacle_lateral_offset_m = 0.0
             route_progress = 0.0
             distance_to_goal = 100.0
 
@@ -136,4 +146,5 @@ class StateAdapter:
             obstacle_distance=obstacle_distance,
             route_progress=route_progress,
             distance_to_goal=distance_to_goal,
+            obstacle_lateral_offset_m=obstacle_lateral_offset_m,
         )

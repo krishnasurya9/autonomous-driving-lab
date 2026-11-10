@@ -13,7 +13,12 @@ class RLAgent(BaseAgent):
     Outputs continuous (steering, throttle_brake) directly.
     """
 
-    def __init__(self, checkpoint_path: str = "rl/checkpoints/sac_2d.zip", target_speed_kmh: float = 40.0):
+    def __init__(
+        self,
+        checkpoint_path: str = "rl/checkpoints/candidate_8d/sac_2d.zip",
+        target_speed_kmh: float = 40.0,
+        expected_observation_dim: int = 8,
+    ):
         super().__init__(name="RL")
         self.checkpoint_path = checkpoint_path
         self.state_adapter = StateAdapter(target_speed_kmh=target_speed_kmh)
@@ -25,6 +30,14 @@ class RLAgent(BaseAgent):
             from stable_baselines3 import SAC
             print(f"[RLAgent] Loading SAC model from checkpoint: {checkpoint_path}")
             self.model = SAC.load(checkpoint_path)
+            actual_shape = tuple(self.model.observation_space.shape)
+            expected_shape = (int(expected_observation_dim),)
+            if actual_shape != expected_shape:
+                self.model = None
+                raise ValueError(
+                    f"SAC checkpoint observation shape {actual_shape} does not match "
+                    f"the active environment {expected_shape}. Retrain the policy for the active observation schema."
+                )
         else:
             print(f"[RLAgent] Warning: Checkpoint {checkpoint_path} not found. Operating with fallback baseline policy (no torch load).")
 

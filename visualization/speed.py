@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 
 
 def plot_speed_profiles(telemetry_dir: str = "telemetry_2d", output_dir: str = "results/plots"):
+    project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.path.join(project_dir, "experiments", "seeds", "test_seeds.json"), encoding="utf-8") as stream:
+        allowed_seeds = {int(seed) for seed in json.load(stream)}
     os.makedirs(output_dir, exist_ok=True)
     agents = ["human", "llm", "rl"]
     colors = {"human": "green", "llm": "blue", "rl": "red"}
@@ -19,7 +22,7 @@ def plot_speed_profiles(telemetry_dir: str = "telemetry_2d", output_dir: str = "
                     data = json.load(stream)
                 meta = data.get("experiment_metadata", data)
                 seed = meta.get("seed")
-                if seed is not None:
+                if seed is not None and int(seed) in allowed_seeds:
                     files_by_agent[agent][int(seed)] = data
             except (OSError, ValueError, TypeError):
                 continue

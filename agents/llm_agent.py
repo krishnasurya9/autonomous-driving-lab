@@ -28,6 +28,8 @@ class LLMAgent(BaseAgent):
         decision_frequency_hz: float = 1.0,
         sim_step_dt: float = 0.02,  # 50 Hz simulator default
         target_speed_kmh: float = 40.0,
+        endpoint: Optional[str] = None,
+        temperature: float = 0.1,
     ):
         super().__init__(name="LLM")
         self.decision_frequency_hz = decision_frequency_hz
@@ -35,9 +37,17 @@ class LLMAgent(BaseAgent):
         
         # Instantiate backend adapter
         if backend_type.lower() == "ollama":
-            self.backend: LLMBackend = OllamaBackend(model_name=model_name)
+            self.backend: LLMBackend = OllamaBackend(
+                model_name=model_name,
+                endpoint=endpoint or "http://localhost:11434/api/generate",
+                temperature=temperature,
+            )
         elif backend_type.lower() == "lmstudio":
-            self.backend = LMStudioBackend(model_name=model_name)
+            self.backend = LMStudioBackend(
+                model_name=model_name,
+                endpoint=endpoint or "http://127.0.0.1:1234/api/v1/chat",
+                temperature=temperature,
+            )
         else:
             self.backend = TransformersBackend(model_name=model_name)
 
@@ -59,6 +69,12 @@ class LLMAgent(BaseAgent):
         self.last_invalid = False
         self.last_backend = "pending"
         self._llm_thread = None
+
+    def wait_for_pending_decision(self) -> None:
+        """Wait briefly for the last asynchronous planner call before saving telemetry."""
+        if self._llm_thread is not None and self._llm_thread.is_alive():
+            timeout = float(getattr(self.backend, "timeout_sec", 5.0)) + 1.0
+            self._llm_thread.join(timeout=timeout)
 
     def _request_decision_async(self, prompt_text: str) -> None:
         if self._llm_thread is not None and self._llm_thread.is_alive():

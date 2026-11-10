@@ -1,0 +1,837 @@
+% ============================================================
+%  SNDA Project Report — LaTeX
+%  Autonomous Driving Benchmarking: SAC vs LLM vs Human
+%  SNDA template: Times New Roman, 12pt, 1.5 spacing,
+%  1 inch margins, justified, bottom-centre page numbers
+% ============================================================
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\usepackage{ragged2e}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{natbib}
+\usepackage{tocloft}
+\usepackage{parskip}
+\usepackage{array}
+
+\onehalfspacing
+\setlength{\parindent}{0.5in}
+\setlength{\parskip}{6pt}
+
+\titleformat{\chapter}[display]
+  {\normalfont\fontsize{14}{17}\bfseries\centering\MakeUppercase}
+  {CHAPTER \thechapter}{10pt}{}
+\titleformat{\section}
+  {\normalfont\fontsize{12}{15}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\fontsize{12}{15}\bfseries}{\thesubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\lstdefinestyle{python}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  stringstyle=\color{orange},
+  commentstyle=\color{gray},
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+}
+
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue}
+
+% ============================================================
+\begin{document}
+\pagenumbering{roman}
+
+% ── COVER PAGE ──────────────────────────────────────────────
+\begin{titlepage}
+\centering\vspace*{1cm}
+{\fontsize{16}{20}\bfseries\MakeUppercase{Autonomous Driving Benchmarking: A Seed-Matched Paired Evaluation of Reinforcement Learning, Large Language Models, and Human Baselines}\par}
+\vspace{2cm}
+{\large Submitted in Partial Fulfillment for the Award of the Degree of\\[0.5em]
+\textbf{Master of Science in Data Science}\par}
+\vspace{2cm}
+{\large By\\[0.5em]\textbf{[Student Name] ([Student ID])}\par}
+\vspace{2cm}
+{\large Under the Guidance of\\[0.5em]\textbf{[Supervisor Name]}\par}
+\vspace{2cm}
+{\large [Department Name]\\[0.5em][Institution Name]\\[0.5em]November, 2026\par}
+\end{titlepage}
+
+% ── DECLARATION ─────────────────────────────────────────────
+\chapter*{Declaration}
+\addcontentsline{toc}{chapter}{Declaration}
+
+I hereby declare that the project report titled \textit{``Autonomous Driving Benchmarking: A Seed-Matched Paired Evaluation of Reinforcement Learning, Large Language Models, and Human Baselines''} submitted in partial fulfillment for the award of the degree of Master of Science in Data Science is my original work and has not been submitted elsewhere for the award of any degree or diploma.
+
+\vspace{2cm}
+\noindent Date:\underline{\hspace{4cm}} \hfill Place:\underline{\hspace{4cm}}
+
+\vspace{2cm}
+\noindent\hfill Signature of Student\hspace{2cm}
+\clearpage
+
+% ── ACKNOWLEDGMENT ──────────────────────────────────────────
+\chapter*{Acknowledgment}
+\addcontentsline{toc}{chapter}{Acknowledgment}
+
+I would like to express my sincere gratitude to my project supervisor, \textbf{[Supervisor Name]}, for their invaluable guidance throughout this project. Special thanks to the open-source communities behind Stable-Baselines3, Gymnasium, and MetaDrive. I also thank my family and friends for their encouragement.
+\clearpage
+
+% ── ABSTRACT ────────────────────────────────────────────────
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This project presents a systematic seed-matched benchmarking study comparing three autonomous driving paradigms: a Soft Actor-Critic (SAC) reinforcement learning policy, a hierarchical local Large Language Model (LLM) planner, and an interactive human driver. All agents are evaluated on the same deterministic procedurally-generated 2D road scenarios, enabling paired statistical comparisons that control for scenario difficulty.
+
+The SAC agent is trained for 50,000 steps using a shaped multi-objective reward covering route progress, lane keeping, speed compliance, safety, and task completion. The LLM agent uses Nemotron 3 Nano 4B (via LM Studio) at 1~Hz for high-level JSON maneuver decisions, executed by a PD controller at 20~Hz. Human participants drive interactively via keyboard.
+
+The SAC policy completes 20/20 held-out routes with zero collisions and zero road departures. Its principal weakness is speed tracking: mean speed is approximately 86~km/h against a 40~km/h target. Human and LLM data collection is in progress; paired t-tests and Wilcoxon signed-rank tests will determine statistical significance upon completion.
+
+\vspace{1em}
+\noindent\textbf{Keywords:} Reinforcement learning, Soft Actor-Critic, autonomous driving, large language models, hierarchical planning, seed-matched evaluation, paired statistical testing.
+\clearpage
+
+% ── TABLE OF CONTENTS ───────────────────────────────────────
+\tableofcontents\clearpage
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}\clearpage
+\listoftables
+\addcontentsline{toc}{chapter}{List of Tables}\clearpage
+
+% ── ACRONYMS ────────────────────────────────────────────────
+\chapter*{List of Acronyms}
+\addcontentsline{toc}{chapter}{List of Acronyms}
+\begin{tabbing}
+\hspace{3cm}\=\kill
+SAC   \> Soft Actor-Critic \\
+RL    \> Reinforcement Learning \\
+LLM   \> Large Language Model \\
+PD    \> Proportional-Derivative (controller) \\
+RMSE  \> Root Mean Square Error \\
+MAE   \> Mean Absolute Error \\
+MDP   \> Markov Decision Process \\
+SB3   \> Stable-Baselines3 \\
+MLP   \> Multi-Layer Perceptron \\
+JSON  \> JavaScript Object Notation \\
+Hz    \> Hertz \\
+km/h  \> Kilometres per hour \\
+EDA   \> Exploratory Data Analysis \\
+\end{tabbing}
+\clearpage
+
+% ============================================================
+\pagenumbering{arabic}\setcounter{page}{1}
+
+% ============================================================
+\chapter{Introduction}
+% ============================================================
+
+\section{Motivation}
+
+Autonomous driving requires an agent to simultaneously track a target speed, maintain lane position, avoid obstacles, and complete a route — combining continuous perception, planning, and control. Three AI paradigms address this:
+
+\textbf{Reinforcement learning (RL)} learns driving behaviour from reward signals. Continuous-action algorithms such as Soft Actor-Critic (SAC) produce compact, fast-inference policies but offer limited interpretability.
+
+\textbf{LLM planners} leverage pre-trained world knowledge for semantic reasoning. They produce human-readable decisions but are too slow for high-frequency control.
+
+\textbf{Human drivers} provide a natural performance baseline integrating intuition and experience.
+
+No prior work has directly compared a small, locally-running LLM planner against a trained SAC policy and a live human driver on \textit{identical} deterministic driving scenarios using paired statistical analysis. This project fills that gap.
+
+\section{Objectives}
+
+\begin{enumerate}
+  \item Formulate vehicle driving as a continuous-control RL task with a shaped multi-objective reward.
+  \item Train a SAC policy on 100 procedural training seeds; select the best checkpoint on 25 validation seeds.
+  \item Implement a hierarchical LLM driving agent at 1~Hz with a 20~Hz PD controller.
+  \item Provide an interactive human baseline using keyboard controls.
+  \item Evaluate all three agents on 20 held-out seeds: task completion, collisions, road departures, RMSE lane deviation, MAE speed error, steering smoothness, and completion time.
+  \item Apply paired t-tests and Wilcoxon signed-rank tests for statistical comparison.
+\end{enumerate}
+
+\section{Scope of the Project}
+
+This project operates within a lightweight seeded 2D driving simulator. All agents share the same 8-value observation, 2-value continuous action, and 20~Hz physics loop. The LLM runs locally (no cloud). Statistical conclusions require complete 20-seed data for all three agents.
+
+\section{Organization of the Report}
+
+Chapter~2 reviews related literature. Chapter~3 defines the problem. Chapter~4 covers architecture and methodology. Chapter~5 details the experimental setup. Chapter~6 describes model building. Chapter~7 presents results. Chapter~8 discusses findings. Chapter~9 outlines future work. Chapter~10 concludes.
+
+% ============================================================
+\chapter{Background and Literature Review}
+% ============================================================
+
+\section{Background}
+
+Autonomous driving has been approached through rule-based systems, classical planning, imitation learning, reinforcement learning, and language-model-based planning. This project focuses on RL, LLM planning, and human control — paradigms with fundamentally different decision processes.
+
+\section{Simulation Platforms}
+
+\citet{li2022metadrive} introduced MetaDrive, a lightweight composable driving simulator supporting procedural map generation from integer seeds. Its deterministic seeding makes it ideal for multi-agent comparison: the same seed always produces the same road geometry and obstacle placement.
+
+\citet{dosovitskiy2017carla} developed CARLA, the most widely used photorealistic urban driving simulator. CARLA benchmarks typically use recorded human trajectories rather than live human comparison. This project uses live keyboard-controlled human driving as a genuine interactive baseline.
+
+\section{Reinforcement Learning for Continuous Control}
+
+\citet{haarnoja2018sac} introduced Soft Actor-Critic (SAC), an off-policy, maximum-entropy RL algorithm for continuous action spaces. SAC simultaneously maximises expected reward and policy entropy, encouraging exploration and robustness. Its off-policy nature allows experience replay (50,000 transitions), making it substantially more sample-efficient than on-policy methods such as PPO.
+
+\citet{raffin2021sb3} provide Stable-Baselines3, the standard RL library used in this project.
+
+\section{Reward Shaping}
+
+\citet{ng1999reward} established the theoretical basis for potential-based reward shaping: adding a dense auxiliary reward to an MDP does not change the optimal policy but dramatically accelerates learning by providing gradient signal before terminal states are reached. This directly motivates the multi-objective shaped reward used here.
+
+\section{LLM-Based Driving Planners}
+
+\citet{ahn2022saycan} established the LLM + low-level skill hierarchy followed in this project. LLMs handle semantic reasoning (\textit{what to do}); deterministic controllers handle physical execution (\textit{how to do it at high frequency}).
+
+\citet{mao2023gptdriver} reformulated motion planning as language modelling using GPT-3.5. This project tests whether the same approach scales to a 4B-parameter local model (Nemotron 3 Nano via LM Studio) with a JSON output vocabulary of 9 maneuver types.
+
+\citet{sha2023languagempc} demonstrated LLM decisions integrated with low-level vehicle controllers for complex driving behaviours, validating the hierarchical architecture used here.
+
+\section{Statistical Evaluation}
+
+\citet{demskar2006statistical} established best practices for comparing ML systems across multiple test instances using paired statistical tests. Because different seeds generate roads of different difficulty, a paired comparison (within each seed) is essential to eliminate scenario difficulty as a confounding variable.
+
+\section{Research Gap}
+
+No prior work directly compares a small ($\leq$7B), locally-running LLM hierarchical planner against a trained SAC policy and a live human driver on \textit{identical} seed-matched procedural driving scenarios, with per-seed paired statistical analysis. This project addresses that gap.
+
+\begin{table}[H]
+\centering
+\caption{Literature summary and contribution to this project}
+\label{tab:lit}
+\begin{tabular}{p{4.5cm}p{1cm}p{7cm}}
+\toprule
+Paper & Year & Contribution \\
+\midrule
+Li et al.\ -- MetaDrive & 2022 & Simulation platform; seed-based procedural generation \\
+Haarnoja et al.\ -- SAC & 2018 & RL algorithm for continuous driving control \\
+Ng et al.\ -- Reward Shaping & 1999 & Theoretical basis for multi-objective shaped reward \\
+Ahn et al.\ -- SayCan & 2022 & LLM + low-level skill hierarchy architecture \\
+Mao et al.\ -- GPT-Driver & 2023 & LLM as motion planner for autonomous driving \\
+Sha et al.\ -- LanguageMPC & 2023 & LLM integrated with low-level controller \\
+Dosovitskiy et al.\ -- CARLA & 2017 & Human baseline context in driving simulators \\
+Demsar -- Statistical Tests & 2006 & Paired comparison methodology \\
+Raffin et al.\ -- SB3 & 2021 & SAC implementation library \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\chapter{Problem Statement}
+% ============================================================
+
+\section{Problem Definition}
+
+Given a seeded procedurally generated road of length 500~m with a single obstacle and sinusoidal curvature, an agent must:
+\begin{itemize}
+  \item Maintain lane position within $\pm 0.6$~m of road centre
+  \item Track a target speed of 40~km/h
+  \item Avoid the obstacle (position determined by seed)
+  \item Complete the route without road departure or collision within a 1,000-step horizon
+\end{itemize}
+
+Formally, this is an MDP $\mathcal{M} = (\mathcal{S}, \mathcal{A}, \mathcal{T}, R, \gamma)$:
+\begin{itemize}
+  \item $\mathcal{S} \subset \mathbb{R}^8$: 8-value normalised observation
+  \item $\mathcal{A} = [-1,1]^2$: continuous (steering, throttle/brake)
+  \item $\mathcal{T}$: deterministic physics update at 20~Hz
+  \item $R$: multi-objective shaped reward (Chapter~4)
+  \item $\gamma = 0.99$
+\end{itemize}
+
+\section{Scope and Importance}
+
+A seed-matched paired comparison is the minimum requirement for a scientifically valid multi-agent evaluation: without pairing, scenario difficulty confounds agent capability. This project is the first to apply this design to a simultaneous comparison of SAC, local LLM, and live human on a shared simulated task, using paired t-tests and Wilcoxon signed-rank tests per metric.
+
+% ============================================================
+\chapter{Methodology and Model Architecture}
+% ============================================================
+
+\section{System Architecture Overview}
+
+The pipeline has three layers:
+\begin{enumerate}
+  \item \textbf{Environment:} seeded 2D simulator at 20~Hz
+  \item \textbf{Agent:} SAC policy, LLM planner + PD controller, or keyboard human
+  \item \textbf{Telemetry and evaluation:} per-step JSON logging, metric computation, statistical analysis
+\end{enumerate}
+
+\section{Observation Space}
+
+\begin{table}[H]
+\centering
+\caption{8-value observation vector}
+\label{tab:obs}
+\begin{tabular}{lll}
+\toprule
+Index & Signal & Normalisation \\
+\midrule
+0 & Current speed & $v / 80$ \\
+1 & Target speed & $v^* / 80$ \\
+2 & Lane deviation (m) & $\delta / 3.0$, clipped $[-2, 2]$ \\
+3 & Heading error (deg) & $\theta / 45.0$, clipped $[-2, 2]$ \\
+4 & Obstacle distance (m) & $d / 100.0$, clipped $[0, 1]$ \\
+5 & Route progress & $s / L$, clipped $[0, 1]$ \\
+6 & Road curvature & $\pm 8$~m lookahead \\
+7 & Signed obstacle lateral offset & $x_{obs} / w_{lane}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The signed lateral offset (index 7) was added after the 7-value policy completed 0/20 routes on audit seeds: without it, the policy could detect an obstacle but not determine which side to pass.
+
+\section{Reward Function}
+
+\begin{equation}
+R = w_p R_p + w_l R_l + w_s R_s + w_{\text{saf}} R_{\text{saf}} + w_t R_t
+\end{equation}
+
+\subsection{Progress ($R_p$)}
+\begin{equation}
+R_p = \frac{v}{v^*} + s \cdot b_{\text{prog}}, \quad b_{\text{prog}} = 2.0
+\end{equation}
+Provides dense forward-motion signal to prevent the agent staying near the start.
+
+\subsection{Lane Keeping ($R_l$)}
+\begin{equation}
+R_l = -|\delta|^{1.5} - 0.1|\theta_{\text{rad}}|
+\end{equation}
+Exponent 1.5 is progressive: tolerates small errors, harshly penalises large deviations.
+
+\subsection{Speed Compliance ($R_s$)}
+\begin{equation}
+R_s = 1 - \min\!\left(\frac{|v-v^*|}{v^*}, 1\right) + \kappa u^2, \quad \kappa = -0.1
+\end{equation}
+Rewards tracking 40~km/h and penalises jerky steering.
+
+\subsection{Safety ($R_{\text{saf}}$)}
+\begin{equation}
+R_{\text{saf}} = p_c \cdot \mathbb{1}[\text{crashed}] + p_r \cdot \mathbb{1}[\text{out\_of\_road}], \quad p_c = p_r = -10.0
+\end{equation}
+The magnitude ($-10$) was raised from an initial $-2$ after the agent learned to crash deliberately for faster route progress.
+
+\subsection{Task Completion ($R_t$)}
+\begin{equation}
+R_t = 5.0 \cdot \mathbb{1}[\text{arrived}], \quad w_t = 10.0 \Rightarrow \text{effective bonus} = +50
+\end{equation}
+
+\begin{table}[H]
+\centering
+\caption{Reward weights (\texttt{config.yaml})}
+\label{tab:weights}
+\begin{tabular}{llr}
+\toprule
+Parameter & Symbol & Value \\
+\midrule
+Progress weight    & $w_p$             & 0.5 \\
+Lane weight        & $w_l$             & 1.5 \\
+Speed weight       & $w_s$             & 2.0 \\
+Safety weight      & $w_{\text{saf}}$  & 1.0 \\
+Task weight        & $w_t$             & 10.0 \\
+Crash penalty      & $p_c$             & $-10.0$ \\
+Off-road penalty   & $p_r$             & $-10.0$ \\
+Progress bonus     & $b_{\text{prog}}$ & 2.0 \\
+Steering penalty   & $\kappa$          & $-0.1$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{SAC Agent}
+
+SAC is chosen because: (a) the action space is continuous; (b) the off-policy replay buffer makes it sample-efficient at 50,000 steps; (c) the maximum-entropy objective improves robustness across unseen seeds.
+
+\begin{table}[H]
+\centering
+\caption{SAC training configuration}
+\label{tab:sac}
+\begin{tabular}{ll}
+\toprule
+Parameter & Value \\
+\midrule
+Algorithm & Soft Actor-Critic (SAC) \\
+Policy & MlpPolicy \\
+Learning rate & $3 \times 10^{-4}$ \\
+Replay buffer & 50,000 \\
+Batch size & 256 \\
+Discount $\gamma$ & 0.99 \\
+Total steps & 50,000 \\
+Train seeds & 1000--1099 (100) \\
+Validation seeds & 1100--1124 (25) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{LLM Agent}
+
+The hierarchical design follows \citet{ahn2022saycan}: LLM at 1~Hz for semantic decisions, PD controller at 20~Hz for physical execution.
+
+\textbf{Maneuver vocabulary:} ACCELERATE, MAINTAIN, SLOW\_DOWN, BRAKE, TURN\_LEFT, TURN\_RIGHT, PREPARE\_LEFT, PREPARE\_RIGHT, STOP.
+
+\textbf{Backend:} Nemotron 3 Nano 4B via LM Studio (\texttt{127.0.0.1:1234}), temperature 0.1, 150 max tokens. Fallback: rule-based MAINTAIN. Fallback episodes are excluded from statistics.
+
+\section{Low-Level PD Controller}
+
+\begin{equation}
+u_{\text{steer}} = \text{clip}\!\left(-k_p(\delta \cdot 0.3 + \theta) - k_d(\theta - \theta_{\text{prev}}),\; -1,\; 1\right)
+\end{equation}
+\begin{equation}
+u_{\text{throttle}} = \text{clip}\!\left(k_v(v^* - v),\; -1,\; 1\right)
+\end{equation}
+with $k_p = 0.8$, $k_d = 0.1$, $k_v = 0.05$.
+
+% ============================================================
+\chapter{Experimental Setup}
+% ============================================================
+
+\section{Simulator}
+
+\textbf{Environment:} \texttt{Driving2DEnv} — seeded Gymnasium-compatible 2D simulator.
+\begin{itemize}
+  \item Road: 500~m sinusoidal centreline parameterised by seed-derived phases
+  \item Obstacle: randomly placed at 150--240~m along the route; $\pm 20\%$ lane offset
+  \item Physics: 20~Hz, kinematics, steering $\rightarrow$ heading rate, throttle $\rightarrow$ speed
+  \item Termination: collision, off-road ($>0.6$~m from centre), arrived, or 1,000-step timeout
+\end{itemize}
+
+\section{Seed Protocol}
+
+\begin{table}[H]
+\centering
+\caption{Seed splits and usage rules}
+\label{tab:seeds}
+\begin{tabular}{llrp{6cm}}
+\toprule
+Split & Range & Count & Purpose \\
+\midrule
+Training & 1000--1099 & 100 & SAC learning \\
+Validation & 1100--1124 & 25 & Checkpoint selection \\
+Dev audit & 2000--2039 & 40 & 7-value policy auditing (legacy) \\
+Held-out comparison & 2040--2059 & 20 & Final three-agent comparison \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The held-out seeds were never used during training or checkpoint selection. The dev-audit seeds are excluded from the final comparison because design decisions (adding the signed offset) were informed by results on those seeds.
+
+\section{Data Collection}
+
+\begin{enumerate}
+  \item \textbf{SAC:} \texttt{python evaluate.py --seeds test --count 20 --agents rl} \\
+        20 episodes saved as \texttt{RL\_SCENARIO\_20XX\_*.json}.
+  \item \textbf{LLM:} \texttt{python evaluate.py --seeds test --count 20 --agents llm} \\
+        LM Studio must be running; each episode must report \texttt{llm\_real\_inference: true}.
+  \item \textbf{Human:} \texttt{2040..2059 | ForEach-Object \{ python run.py --agent human --seed \$\_ \}} \\
+        One interactive episode per seed.
+\end{enumerate}
+
+\section{Dataset Summary}
+
+\begin{table}[H]
+\centering
+\caption{Dataset summary}
+\label{tab:dataset}
+\begin{tabular}{lrp{7cm}}
+\toprule
+Feature & Value & Description \\
+\midrule
+Agents & 3 & SAC, LLM, Human \\
+Held-out seeds & 20 & 2040--2059 \\
+Steps per episode (max) & 1,000 & At 20~Hz = 50~s max \\
+Observation dimension & 8 & See Table~\ref{tab:obs} \\
+Action dimension & 2 & Steering, throttle/brake \\
+SAC episodes collected & 20 & Complete, 0 collisions \\
+LLM episodes collected & 0 & Pending \\
+Human episodes collected & 0 & Pending \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Preprocessing and Feature Extraction}
+
+Per-episode metrics are computed from raw step telemetry by \texttt{evaluation/metrics.py}:
+\begin{itemize}
+  \item RMSE lane deviation: $\sqrt{\frac{1}{T}\sum_{t=1}^T \delta_t^2}$
+  \item MAE speed error: $\frac{1}{T}\sum_{t=1}^T |v_t - v^*|$
+  \item Steering smoothness: $J = \frac{1}{T-1}\sum_{t=1}^{T-1} |u_{t+1} - u_t|$
+  \item Task completion: binary (arrived vs not)
+  \item Completion time: steps $\times 0.05$~s
+\end{itemize}
+
+Finite-value checks are applied; non-finite telemetry is rejected before metric computation.
+
+% ============================================================
+\chapter{Model Building and Training}
+% ============================================================
+
+\section{SAC Training}
+
+The SAC policy is trained using Stable-Baselines3 on seeds 1000--1099. The trainer cycles through training seeds, resetting the environment to a new seed each episode. Validation rewards are computed on seeds 1100--1124 at checkpoint intervals.
+
+\begin{lstlisting}[style=python, caption={SAC training launch (rl/train\_sac.py excerpt)}]
+from stable_baselines3 import SAC
+from stable_baselines3.common.callbacks import EvalCallback
+
+model = SAC(
+    "MlpPolicy", env,
+    learning_rate=3e-4,
+    buffer_size=50000,
+    batch_size=256,
+    gamma=0.99,
+    verbose=1,
+)
+eval_cb = EvalCallback(eval_env, best_model_save_path="rl/checkpoints/")
+model.learn(total_timesteps=50000, callback=eval_cb)
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.80\textwidth]{../results/plots/rl_training_curve.png}
+  \caption{SAC training reward curve showing reward progression over 50,000 steps.}
+  \label{fig:training_curve}
+\end{figure}
+
+\section{Checkpoint Selection}
+
+The best checkpoint is selected by mean validation reward on seeds 1100--1124. The final 8-value SAC checkpoint is stored at \texttt{rl/checkpoints/candidate\_8d/sac\_2d.zip}.
+
+\section{Observation Shape Validation}
+
+At load time, the agent checks that the checkpoint observation shape matches the active environment (8,). If a mismatch is detected (e.g., loading the old 7-value checkpoint), a \texttt{ValueError} is raised and training or evaluation is blocked.
+
+\begin{lstlisting}[style=python, caption={Shape check in rl\_agent.py}]
+actual_shape = tuple(self.model.observation_space.shape)
+expected_shape = (int(expected_observation_dim),)
+if actual_shape != expected_shape:
+    self.model = None
+    raise ValueError(
+        f"SAC checkpoint shape {actual_shape} does not match "
+        f"environment {expected_shape}."
+    )
+\end{lstlisting}
+
+\section{LLM Integration}
+
+The LLM backend sends a formatted state description to the Nemotron model and parses the JSON response. Invalid JSON triggers a fallback \texttt{MAINTAIN} decision and sets \texttt{llm\_invalid\_output: true} in telemetry.
+
+\begin{lstlisting}[style=python, caption={Output parser fallback (llm/output\_parser.py)}]
+json_match = re.search(r"\{.*\}", raw_text, re.DOTALL)
+try:
+    data = json.loads(json_match.group(0))
+    return HighLevelDecision.from_dict(data), False
+except Exception:
+    return HighLevelDecision(maneuver="MAINTAIN"), True
+\end{lstlisting}
+
+% ============================================================
+\chapter{Model Evaluation and Results}
+% ============================================================
+
+\section{Evaluation Metrics}
+
+\begin{itemize}
+  \item \textbf{Task Completion Rate:} fraction of 20 seeds completed successfully
+  \item \textbf{Total Collisions:} sum of obstacle-hit events
+  \item \textbf{Off-Road Events:} sum of road-departure terminations
+  \item \textbf{RMSE Lane Deviation (m):} per-episode root-mean-square lateral error
+  \item \textbf{MAE Speed Error (km/h):} per-episode mean absolute deviation from 40~km/h
+  \item \textbf{Control Smoothness:} mean absolute steering change per step
+  \item \textbf{Completion Time (s):} episode duration
+  \item \textbf{Final Route Progress:} fraction of 500~m completed
+\end{itemize}
+
+\section{SAC Results on Held-Out Seeds}
+
+\begin{table}[H]
+\centering
+\caption{SAC agent summary on seeds 2040--2059 (N=20)}
+\label{tab:sac_results}
+\begin{tabular}{lrr}
+\toprule
+Metric & SAC Value & Notes \\
+\midrule
+Task completion rate & 20/20 (100\%) & All routes finished \\
+Total collisions & 0 & Zero obstacle hits \\
+Off-road events & 0 & Zero road departures \\
+Mean route progress & 1.0 (100\%) & Every route completed \\
+Mean speed & $\approx$86~km/h & Well above 40~km/h target \\
+MAE speed error & High & Principal weakness \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Speed tracking weakness:} The SAC policy averages approximately 86~km/h against a 40~km/h target. The reward balance prioritised route completion and progress over speed compliance during the 50,000-step training budget. This must be disclosed alongside route completion results.
+
+\section{Visualisation}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\textwidth]{../results/plots/bar_task_completion_rate.png}
+  \hfill
+  \includegraphics[width=0.48\textwidth]{../results/plots/bar_total_collisions.png}
+  \caption{Task completion rate (left) and total collisions (right) across agents. SAC shows 100\% completion with zero collisions. Human and LLM bars will populate upon data collection.}
+  \label{fig:bars1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\textwidth]{../results/plots/bar_rmse_lane_deviation_m.png}
+  \hfill
+  \includegraphics[width=0.48\textwidth]{../results/plots/bar_mae_speed_error_kmh.png}
+  \caption{RMSE lane deviation (left) and MAE speed error (right). The speed error bar confirms the SAC over-speed weakness.}
+  \label{fig:bars2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\textwidth]{../results/plots/bar_control_smoothness_steering.png}
+  \hfill
+  \includegraphics[width=0.48\textwidth]{../results/plots/bar_off_road_events.png}
+  \caption{Control smoothness (left) and off-road events (right).}
+  \label{fig:bars3}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\textwidth]{../results/plots/bar_completion_time_sec.png}
+  \hfill
+  \includegraphics[width=0.48\textwidth]{../results/plots/bar_final_route_progress.png}
+  \caption{Episode completion time (left) and final route progress (right).}
+  \label{fig:bars4}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.70\textwidth]{../results/plots/speed_profile_seed_2040.png}
+  \caption{Speed profile for seed 2040 (SAC agent). Speed consistently exceeds the 40~km/h target, confirming the over-speed issue.}
+  \label{fig:speed_2040}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.70\textwidth]{../results/plots/trajectory_seed_2040.png}
+  \caption{Trajectory for seed 2040. The SAC agent navigates the obstacle (orange circle) and completes the route.}
+  \label{fig:traj_2040}
+\end{figure}
+
+\section{Statistical Tests}
+
+Paired t-tests and Wilcoxon signed-rank tests are implemented in \texttt{evaluation/statistical\_tests.py} and will be applied to all three agent pairings (RL vs LLM, RL vs Human, LLM vs Human) across all five metrics once paired data is complete.
+
+\begin{table}[H]
+\centering
+\caption{Current paired sample counts (pending human and LLM collection)}
+\label{tab:pairs}
+\begin{tabular}{lr}
+\toprule
+Comparison & Paired seeds \\
+\midrule
+RL vs LLM & 0 / 20 \\
+RL vs Human & 0 / 20 \\
+LLM vs Human & 0 / 20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+No winner, significance, or ranking can be reported until all three agents have complete, matched data on seeds 2040--2059.
+
+% ============================================================
+\chapter{Discussion}
+% ============================================================
+
+\section{Key Findings}
+
+\textbf{SAC route completion:} The 8-value SAC policy achieves 100\% route completion on the held-out seeds with zero collisions and zero road departures. This is a substantial improvement over the earlier 7-value policy, which completed 0/20 routes. The critical change was adding the signed obstacle lateral offset to the observation, enabling the agent to choose the correct passing side.
+
+\textbf{Speed tracking weakness:} Despite high route completion, the SAC policy averages $\approx$86~km/h against a 40~km/h target. The reward balance ($w_s = 2.0$) was insufficient to fully constrain speed during 50,000 training steps. This is not a failure of the architecture but of reward weight tuning — a known trade-off when balancing route completion against speed compliance.
+
+\textbf{LLM connectivity:} LM Studio confirmed real inference on a development-seed smoke run (\texttt{llm\_real\_inference: true}). Full 20-seed evaluation is pending.
+
+\textbf{Human baseline:} The final keyboard control sensitivity was validated in the simulator window. Full 20-seed interactive collection is pending.
+
+\section{Challenges Faced}
+
+\begin{enumerate}
+  \item \textbf{Observation design:} The 7-value policy failed because obstacle side information was absent. This required a second training run with the corrected 8-value observation.
+  \item \textbf{Reward calibration:} Initial safety penalty of $-2$ was too weak; the agent exploited crashes. Increasing to $-10$ resolved this.
+  \item \textbf{MetaDrive dependency failure:} Windows GPU rendering dependencies could not be resolved in the demo environment, requiring development of the custom 2D simulator.
+  \item \textbf{LLM latency:} At $\approx$1--3~s per inference, the LLM cannot operate at simulator frequency (20~Hz). The hierarchical 1~Hz design was chosen to work within this constraint.
+  \item \textbf{Human collection overhead:} Each interactive episode requires real-time manual driving ($\approx$25--50~s per seed). Twenty seeds is a manageable but non-trivial collection effort.
+\end{enumerate}
+
+% ============================================================
+\chapter{Future Work}
+% ============================================================
+
+\section{Enhancements and Extensions}
+
+\begin{enumerate}
+  \item \textbf{Complete the three-agent comparison:} Collect human and LLM episodes on seeds 2040--2059 and run the paired analysis. This is the immediate next step.
+
+  \item \textbf{Speed tracking improvement:} Increase $w_s$ or add a quadratic speed penalty to bring SAC mean speed closer to 40~km/h. Requires a new training run and re-evaluation on new held-out seeds.
+
+  \item \textbf{Larger LLM:} Evaluate a 7B-parameter model (e.g., Qwen 2.5 7B via Ollama) to assess whether increased capacity improves maneuver quality and reduces invalid-output rate.
+
+  \item \textbf{MetaDrive integration:} Revisit 3D MetaDrive integration with offscreen rendering to access richer scenarios (multi-lane roads, traffic, intersections).
+
+  \item \textbf{Imitation learning baseline:} Add a behaviour-cloning agent trained on human demonstrations as a fourth comparison point.
+
+  \item \textbf{Multi-obstacle scenarios:} Extend the 2D simulator to include multiple obstacles to stress-test both the SAC policy and the LLM planner's reasoning.
+
+  \item \textbf{Latency-aware LLM scheduling:} Implement adaptive LLM frequency that adjusts the decision interval based on measured inference latency to avoid stale decisions.
+\end{enumerate}
+
+% ============================================================
+\chapter{Conclusion}
+% ============================================================
+
+This project developed and evaluated a complete autonomous driving benchmarking framework comparing three AI paradigms: SAC reinforcement learning, hierarchical LLM planning, and live human driving.
+
+The key contributions are:
+\begin{itemize}
+  \item A seeded 2D driving simulator with deterministic Gymnasium interface
+  \item A multi-objective shaped reward function with five components and configurable weights
+  \item An 8-value observation design that enables correct obstacle-side avoidance
+  \item A hierarchical LLM agent operating at 1~Hz with a 20~Hz PD controller
+  \item A complete evaluation pipeline with RMSE, MAE, smoothness, and task-completion metrics
+  \item A seed-matched paired statistical testing framework
+\end{itemize}
+
+The 8-value SAC policy achieves 100\% route completion on 20 held-out seeds with zero collisions and zero road departures. Its speed tracking is a disclosed weakness. Human and LLM data collection on the matching seeds remains pending; the full three-agent paired comparison and statistical conclusions will follow.
+
+The framework is modular, reproducible, and extensible to larger simulators, additional agents, and more complex scenarios.
+
+% ============================================================
+% REFERENCES
+% ============================================================
+\begin{thebibliography}{99}
+\addcontentsline{toc}{chapter}{References}
+
+\bibitem{li2022metadrive}
+Li, Q., Peng, Z., Feng, L., Zhang, Q., Xue, Z., \& Zhou, B. (2022).
+MetaDrive: Composing diverse driving scenarios for generalizable reinforcement learning.
+\textit{IEEE Transactions on Pattern Analysis and Machine Intelligence}. arXiv:2109.12674.
+
+\bibitem{haarnoja2018sac}
+Haarnoja, T., Zhou, A., Abbeel, P., \& Levine, S. (2018).
+Soft actor-critic: Off-policy maximum entropy deep reinforcement learning with a stochastic actor.
+\textit{Proceedings of ICML 2018}. arXiv:1801.01290.
+
+\bibitem{ng1999reward}
+Ng, A. Y., Harada, D., \& Russell, S. (1999).
+Policy invariance under reward transformations: Theory and application to reward shaping.
+\textit{Proceedings of ICML 1999}, 278--287.
+
+\bibitem{ahn2022saycan}
+Ahn, M., Brohan, A., Brown, N., et al. (2022).
+Do as I can, not as I say: Grounding language in robotic affordances.
+\textit{arXiv:2204.01691}.
+
+\bibitem{mao2023gptdriver}
+Mao, J., Qian, Y., Ye, Y., \& Wang, Y. (2023).
+GPT-Driver: Learning to drive with GPT.
+\textit{NeurIPS 2023 Workshop on Foundation Models for Decision Making}. arXiv:2310.01415.
+
+\bibitem{sha2023languagempc}
+Sha, H., Mu, Y., Jiang, Y., Chen, L., Xu, C., Luo, P., \& Li, H. (2023).
+LanguageMPC: Large language models as decision makers for autonomous driving.
+\textit{arXiv:2310.03026}.
+
+\bibitem{dosovitskiy2017carla}
+Dosovitskiy, A., Ros, G., Codevilla, F., Lopez, A., \& Koltun, V. (2017).
+CARLA: An open urban driving simulator.
+\textit{Proceedings of CoRL 2017}. arXiv:1711.03938.
+
+\bibitem{demskar2006statistical}
+Dem\v{s}ar, J. (2006).
+Statistical comparisons of classifiers over multiple data sets.
+\textit{Journal of Machine Learning Research}, 7, 1--30.
+
+\bibitem{raffin2021sb3}
+Raffin, A., Hill, A., Gleave, A., Kanervisto, A., Ernestus, M., \& Dormann, N. (2021).
+Stable-Baselines3: Reliable reinforcement learning implementations.
+\textit{Journal of Machine Learning Research}, 22(268), 1--8. arXiv:2005.05719.
+
+\end{thebibliography}
+
+% ============================================================
+% APPENDICES
+% ============================================================
+\appendix
+\chapter{Additional Speed Profiles}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\textwidth]{../results/plots/speed_profile_seed_2041.png}
+  \hfill
+  \includegraphics[width=0.48\textwidth]{../results/plots/speed_profile_seed_2042.png}
+  \caption{Speed profiles for seeds 2041 (left) and 2042 (right).}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\textwidth]{../results/plots/speed_profile_seed_2043.png}
+  \hfill
+  \includegraphics[width=0.48\textwidth]{../results/plots/speed_profile_seed_2044.png}
+  \caption{Speed profiles for seeds 2043 (left) and 2044 (right).}
+\end{figure}
+
+\chapter{Sample Trajectories}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\textwidth]{../results/plots/trajectory_seed_2041.png}
+  \hfill
+  \includegraphics[width=0.48\textwidth]{../results/plots/trajectory_seed_2042.png}
+  \caption{Trajectories for seeds 2041 (left) and 2042 (right).}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\textwidth]{../results/plots/trajectory_seed_2043.png}
+  \hfill
+  \includegraphics[width=0.48\textwidth]{../results/plots/trajectory_seed_2044.png}
+  \caption{Trajectories for seeds 2043 (left) and 2044 (right).}
+\end{figure}
+
+\chapter{Reward Function Configuration}
+
+\begin{lstlisting}[style=python, caption={reward\_weights section of config.yaml}]
+reward_weights:
+  w_progress: 0.5
+  w_lane: 1.5
+  w_speed: 2.0
+  w_safety: 1.0
+  w_task: 10.0
+  crash_penalty: -10.0
+  out_of_road_penalty: -10.0
+  progress_bonus: 2.0
+  steering_penalty: -0.1
+\end{lstlisting}
+
+\end{document}

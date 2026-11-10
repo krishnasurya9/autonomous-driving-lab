@@ -1,190 +1,190 @@
-import os
-os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
-import torch
-import numpy as np
-if not hasattr(np, "float"):
-    np.float = np.float64
-if not hasattr(np, "int"):
-    np.int = np.int_
-if not hasattr(np, "bool"):
-    np.bool = np.bool_
+"""Run individual or seed-matched episodes in the configured driving simulator."""
 
-import sys
+from __future__ import annotations
+
 import json
-import argparse
-from typing import List
+import os
+import time
+from typing import Any, Dict, List, Optional
 
-sys.path.insert(0, os.path.abspath("."))
+import yaml
 
-from environment.metadrive_env import CustomMetaDriveEnv
-from environment.state_adapter import StateAdapter
-from environment.hud import HUDManager
-from telemetry.logger import TelemetryLogger
-from telemetry.video_recorder import VideoRecorder
 from agents.human_agent import HumanAgent
-# LLMAgent and RLAgent are imported lazily below to avoid crashing when
-# their heavy dependencies (torch, transformers) are not needed.
+from environment.driving_2d_env import Driving2DEnv
+from environment.state_adapter import StateAdapter
+from telemetry.logger import TelemetryLogger
 
-def run_paired_experiment_on_seed(seed: int, agent_type: str, max_steps: int = 1000, render: bool = True, save_video: bool = False):
-    print(f"--- Running Seed {seed} for Agent: {agent_type.upper()} (render={render}, save_video={save_video}) ---")
 
-    is_human = (agent_type.lower() == "human")
-    agent_type_lower = agent_type.lower()
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-    # Load RL/torch before any MetaDrive gltf imports to avoid Windows DLL conflicts.
-    if is_human:
-        agent = HumanAgent()
-    elif agent_type_lower == "llm":
+
+def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
+    path = config_path or os.path.join(PROJECT_DIR, "config.yaml")
+    with open(path, "r", encoding="utf-8") as stream:
+        return yaml.safe_load(stream) or {}
+
+
+def _make_agent(agent_type: str, config: Dict[str, Any], sim_step_dt: float, observation_dim: int):
+    normalized = agent_type.lower()
+    target_speed = float(config.get("environment", {}).get("target_speed_kmh", 40.0))
+    if normalized == "human":
+        return HumanAgent()
+    if normalized == "llm":
         from agents.llm_agent import LLMAgent
-        agent = LLMAgent(backend_type="ollama", model_name="qwen2.5:7b")
-    elif agent_type_lower == "rl":
-        from agents.rl_agent import RLAgent
-        agent = RLAgent(checkpoint_path="rl/checkpoints/sac_metadrive.zip")
-    else:
-        raise ValueError(f"Unknown agent type: {agent_type}")
 
-    env_config = {
-        "seed": seed,
-        "render": render,
-        "manual_control": is_human and render,
-        "traffic_density": 0.1,
-        "target_speed_kmh": 40.0,
-    }
-    env = CustomMetaDriveEnv(env_config)
-
-    while True:
-        obs_vec, _ = env.reset(seed=seed)
-        agent.reset()
-        state_adapter = StateAdapter(target_speed_kmh=40.0)
-        logger = TelemetryLogger(
-            agent_type=agent_type.upper(),
-            scenario_id=f"SCENARIO_{seed}",
-            seed=seed,
-            output_dir="telemetry",
+        llm_config = config.get("llm", {})
+        return LLMAgent(
+            backend_type=llm_config.get("backend", "ollama"),
+            model_name=llm_config.get("model", "qwen2.5:7b"),
+            decision_frequency_hz=float(llm_config.get("decision_frequency_hz", 1.0)),
+            sim_step_dt=sim_step_dt,
+            target_speed_kmh=target_speed,
+            endpoint=llm_config.get("ollama_url") if llm_config.get("backend", "ollama").lower() == "ollama" else llm_config.get("lmstudio_url"),
+            temperature=float(llm_config.get("temperature", 0.1)),
         )
+    if normalized == "rl":
+        from agents.rl_agent import RLAgent
 
-        hud = HUDManager(agent_type=agent_type, seed=seed, target_speed_kmh=40.0) if render else None
-        video_recorder = None
-        if save_video:
-            video_recorder = VideoRecorder(agent_type=agent_type, seed=seed, output_dir="recordings")
+        checkpoint = config.get("rl", {}).get("checkpoint", "rl/checkpoints/sac_2d.zip")
+        if not os.path.isabs(checkpoint):
+            checkpoint = os.path.join(PROJECT_DIR, checkpoint)
+        return RLAgent(
+            checkpoint_path=checkpoint,
+            target_speed_kmh=target_speed,
+            expected_observation_dim=observation_dim,
+        )
+    raise ValueError(f"Unknown agent type {agent_type!r}; expected human, llm, or rl.")
 
-        terminated = False
-        truncated = False
-        step = 0
-        crashed = False
-        out_of_road = False
 
-        while step < max_steps and not (terminated or truncated):
-            action, info = agent.get_action(env, obs_vec)
-            obs_vec, reward, terminated, truncated, env_info = env.step(action)
+def run_paired_experiment_on_seed(
+    seed: int,
+    agent_type: str,
+    max_steps: Optional[int] = None,
+    render: bool = True,
+    save_video: bool = False,
+    config: Optional[Dict[str, Any]] = None,
+) -> str:
+    """Run one agent on one deterministic 2D scenario and save its telemetry."""
+    cfg = config or load_config()
+    env_cfg = dict(cfg.get("environment", {}))
+    if env_cfg.get("backend", "2d").lower() != "2d":
+        raise ValueError("This runner currently supports environment.backend: 2d only.")
+    env_cfg.update(seed=int(seed), render=bool(render))
+    if max_steps is not None:
+        env_cfg["horizon"] = int(max_steps)
+    if agent_type.lower() == "human" and not render:
+        raise ValueError("Human runs require rendering so keyboard controls are available.")
+    if save_video:
+        raise NotImplementedError("Video export is not configured for the 2D simulator.")
 
-            state = state_adapter.extract_state(env)
-            vehicle_pos = env._env.vehicle.position if (hasattr(env, "_env") and hasattr(env._env, "vehicle")) else (0.0, 0.0)
+    env = Driving2DEnv(env_cfg)
+    agent = _make_agent(agent_type, cfg, env.dt, env.observation_space.shape[0])
+    adapter = StateAdapter(target_speed_kmh=env.target_speed_kmh)
+    obs, _reset_info = env.reset(seed=int(seed))
+    agent.reset()
+    logger = TelemetryLogger(
+        agent_type=agent_type.upper(),
+        scenario_id=f"SCENARIO_{seed}",
+        seed=int(seed),
+        target_speed_kmh=env.target_speed_kmh,
+        step_duration_sec=env.dt,
+        environment_backend=env_cfg.get("backend", "2d"),
+        observation_dim=env.observation_space.shape[0],
+        action_dim=env.action_space.shape[0],
+        policy_checkpoint=getattr(agent, "checkpoint_path", None),
+        output_dir=os.path.join(PROJECT_DIR, "telemetry_2d"),
+    )
 
-            crashed = env_info.get("crash", False)
-            out_of_road = env_info.get("out_of_road", False)
-            if crashed:
+    terminated = False
+    truncated = False
+    info: Dict[str, Any] = {}
+    step = 0
+    try:
+        limit = int(env.horizon if max_steps is None else max_steps)
+        while step < limit and not (terminated or truncated):
+            if agent_type.lower() == "human" and env._window_closed:
+                info = {**info, "terminated_reason": "user_exit"}
+                break
+            frame_started = time.perf_counter()
+            action, agent_info = agent.get_action(env, obs)
+            obs, reward, terminated, truncated, info = env.step(action)
+            state = adapter.extract_state(env)
+            if info.get("crash"):
                 logger.record_collision()
-                terminated = True
-            if out_of_road:
+            if info.get("out_of_road"):
                 logger.record_off_road()
-
             logger.log_step(
                 step=step,
-                pos_x=float(vehicle_pos[0]),
-                pos_y=float(vehicle_pos[1]),
-                speed_kmh=state.speed_kmh,
+                pos_x=float(env.progress_m),
+                pos_y=float(state.lane_deviation_m),
+                speed_kmh=float(state.speed_kmh),
                 steering=float(action[0]),
-                throttle=float(action[1] if action[1] > 0 else 0.0),
-                brake=float(-action[1] if action[1] < 0 else 0.0),
-                lane_deviation_m=state.lane_deviation_m,
-                heading_error_deg=state.heading_error_deg,
-                llm_decision=info.get("decision"),
-                llm_latency_sec=info.get("llm_latency_sec"),
-                llm_invalid_output=info.get("llm_invalid_output", False),
+                throttle=max(float(action[1]), 0.0),
+                brake=max(-float(action[1]), 0.0),
+                lane_deviation_m=float(state.lane_deviation_m),
+                heading_error_deg=float(state.heading_error_deg),
+                route_progress=float(state.route_progress),
+                obstacle_distance=float(state.obstacle_distance),
+                obstacle_lateral_offset_m=float(state.obstacle_lateral_offset_m),
+                reward=float(reward),
+                agent_policy=agent_info.get("policy"),
+                llm_decision=agent_info.get("decision"),
+                llm_backend=agent_info.get("llm_backend"),
+                llm_latency_sec=agent_info.get("llm_latency_sec"),
+                llm_invalid_output=bool(agent_info.get("llm_invalid_output", False)),
             )
-
-            if hud is not None:
-                maneuver_text = None
-                if "decision" in info and isinstance(info["decision"], dict):
-                    maneuver_text = info["decision"].get("maneuver")
-                hud.update(
-                    speed_kmh=state.speed_kmh,
-                    lane_deviation_m=state.lane_deviation_m,
-                    heading_error_deg=state.heading_error_deg,
-                    route_progress=state.route_progress,
-                    collisions=logger.collisions,
-                    maneuver=maneuver_text,
-                    off_road=out_of_road,
-                )
-
-            if video_recorder is not None:
-                try:
-                    frame = env._env.render(mode="topdown")
-                    if frame is not None:
-                        video_recorder.add_frame(frame)
-                except Exception:
-                    pass
-
-            if (out_of_road or crashed) and render:
-                import time
-                env._env.render()
-                time.sleep(1)
-                break
-
+            if render:
+                env.render()
+                remaining = env.dt - (time.perf_counter() - frame_started)
+                if remaining > 0:
+                    time.sleep(remaining)
             step += 1
 
-        if hud is not None:
-            hud.cleanup()
+        if hasattr(agent, "wait_for_pending_decision"):
+            agent.wait_for_pending_decision()
+        filepath = logger.save(
+            task_completed=bool(info.get("arrive_dest", False)),
+            terminated_reason=info.get("terminated_reason"),
+            final_route_progress=float(info.get("route_progress", env.progress_m / env.route_length_m)),
+        )
+        print(
+            f"{agent_type.upper()} seed {seed}: {step} steps, "
+            f"{100.0 * env.progress_m / env.route_length_m:.1f}% route, "
+            f"{info.get('terminated_reason', 'incomplete')}; telemetry: {filepath}"
+        )
+        if agent_type.lower() == "human" and render and (terminated or truncated):
+            env.show_episode_result(
+                reason=info.get("terminated_reason"),
+                route_progress=float(info.get("route_progress", env.progress_m / env.route_length_m)),
+            )
+        return filepath
+    finally:
+        env.close()
 
-        task_completed = env_info.get("arrive_dest", False) or (not terminated and not truncated)
-        filepath = logger.save(task_completed=task_completed)
-        if video_recorder is not None:
-            video_recorder.close()
 
-        print(f"    Completed Seed {seed} for {agent_type.upper()}. Telemetry: {filepath}")
-
-        if is_human and render and (out_of_road or crashed):
-            import tkinter as tk
-            from tkinter import messagebox
-            root = tk.Tk()
-            root.attributes('-topmost', True)
-            root.withdraw()
-            msg = "You crashed into another vehicle!" if crashed else "You drove completely off the road!"
-            retry = messagebox.askyesno("Game Over", f"{msg}\n\nWould you like to try again?")
-            root.destroy()
-            if retry:
-                continue
-            else:
-                break
-        else:
-            break
-
-    env.close()
-
-def run_paired_suite(seeds: List[int], agents: List[str] = ["human", "llm", "rl"]):
-    print("=" * 60)
-    print(f"STARTING PAIRED EXPERIMENT SUITE OVER {len(seeds)} SEEDS")
-    print("=" * 60)
-
+def run_paired_suite(seeds: List[int], agents: Optional[List[str]] = None) -> List[str]:
+    """Run selected agents sequentially on each supplied seed."""
+    agent_list = agents or ["llm", "rl"]
+    outputs = []
     for seed in seeds:
-        print(f"\n==================== SCENARIO SEED {seed} ====================")
-        for agent in agents:
-            run_paired_experiment_on_seed(seed=seed, agent_type=agent, render=False, save_video=False)
+        print(f"\n=== Scenario seed {seed} ===")
+        for agent in agent_list:
+            outputs.append(run_paired_experiment_on_seed(seed=seed, agent_type=agent, render=False))
+    print(f"\nCompleted {len(outputs)} episodes across {len(seeds)} seeds.")
+    return outputs
 
-    print("\n" + "=" * 60)
-    print("PAIRED EXPERIMENT SUITE COMPLETED SUCCESSFULLY!")
-    print("=" * 60)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--seeds_file", type=str, default="experiments/seeds/test_seeds.json")
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Run a seed-matched 2D driving experiment.")
+    parser.add_argument("--seeds-file", default="experiments/seeds/test_seeds.json")
+    parser.add_argument("--count", type=int, default=None)
+    parser.add_argument("--agents", default="llm,rl")
     args = parser.parse_args()
-
-    if os.path.exists(args.seeds_file):
-        with open(args.seeds_file, "r") as f:
-            test_seeds = json.load(f)
-    else:
-        test_seeds = [2000, 2001, 2002]
-
-    run_paired_suite(seeds=test_seeds[:3])
+    seed_file = args.seeds_file if os.path.isabs(args.seeds_file) else os.path.join(PROJECT_DIR, args.seeds_file)
+    with open(seed_file, "r", encoding="utf-8") as stream:
+        seeds = json.load(stream)
+    if args.count is not None:
+        seeds = seeds[: args.count]
+    run_paired_suite(seeds, [item.strip().lower() for item in args.agents.split(",") if item.strip()])

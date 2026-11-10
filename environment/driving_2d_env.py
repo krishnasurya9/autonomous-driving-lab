@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import time
 import tkinter as tk
 from typing import Any, Dict, Optional, Tuple
 
@@ -17,8 +18,8 @@ from rl.reward import DrivingReward
 class Driving2DEnv(gym.Env):
     """Seeded single-lane road driving task for humans and continuous-control agents.
 
-    Observations and actions retain the project's existing 7-value/2-value shape,
-    so the controller and SAC training pipeline can share this environment.
+    The environment exposes an 8-value observation and 2-value continuous action,
+    shared by the controller, human interface, and SAC training pipeline.
     """
 
     metadata = {"render_modes": ["human"], "render_fps": 30}
@@ -34,7 +35,7 @@ class Driving2DEnv(gym.Env):
         self.horizon = int(self.config.get("horizon", 1000))
         self.render_enabled = bool(self.config.get("render", False))
 
-        self.observation_space = spaces.Box(low=-5.0, high=5.0, shape=(7,), dtype=np.float32)
+        self.observation_space = spaces.Box(low=-5.0, high=5.0, shape=(8,), dtype=np.float32)
         self.action_space = spaces.Box(
             low=np.array([-1.0, -1.0], dtype=np.float32),
             high=np.array([1.0, 1.0], dtype=np.float32),
@@ -81,6 +82,8 @@ class Driving2DEnv(gym.Env):
             min(obstacle_dist, 100.0) / 100.0,
             np.clip(self.progress_m / self.route_length_m, 0.0, 1.0),
             curvature,
+            np.clip(self._obstacle_offset / self.lane_width_m, -1.0, 1.0)
+            if obstacle_dist < 100.0 else 0.0,
         ], dtype=np.float32)
 
     def get_driving_state(self) -> DrivingState:
@@ -101,6 +104,7 @@ class Driving2DEnv(gym.Env):
             obstacle_distance=max(0.0, dist) if obstacle_present else 100.0,
             route_progress=float(np.clip(self.progress_m / self.route_length_m, 0.0, 1.0)),
             distance_to_goal=max(0.0, self.route_length_m - self.progress_m),
+            obstacle_lateral_offset_m=self._obstacle_offset if obstacle_present else 0.0,
         )
 
     def reset(self, seed: Optional[int] = None, options: Optional[Dict[str, Any]] = None) -> Tuple[np.ndarray, Dict[str, Any]]:
@@ -178,6 +182,8 @@ class Driving2DEnv(gym.Env):
             "arrive_dest": arrived,
             "terminated_reason": self.terminated_reason,
             "route_progress": state.route_progress,
+            "obstacle_distance": state.obstacle_distance,
+            "obstacle_lateral_offset_m": state.obstacle_lateral_offset_m,
             "collisions": self.collisions,
             "seed": self._seed,
         }
@@ -191,6 +197,7 @@ class Driving2DEnv(gym.Env):
         self._ensure_window()
         self._pump_events()
         steer = float("d" in self._keys or "right" in self._keys) - float("a" in self._keys or "left" in self._keys)
+        steer *= 0.15
         throttle = float("w" in self._keys or "up" in self._keys)
         brake = float("s" in self._keys or "down" in self._keys or "space" in self._keys)
         return np.asarray([steer, throttle - brake], dtype=np.float32)
@@ -278,9 +285,21 @@ class Driving2DEnv(gym.Env):
         canvas.create_text(20, 18, anchor="nw", fill="white", font=("Segoe UI", 12, "bold"),
                            text=f"2D DRIVE  ·  {self._seed}\nSpeed  {self.speed_kmh:4.0f} / {self.target_speed_kmh:.0f} km/h\nLane   {self.lane_deviation_m:+.2f} m\nRoute  {100 * self.progress_m / self.route_length_m:4.1f}%")
         canvas.create_text(width - 18, height - 18, anchor="se", fill="#d1d5db", font=("Segoe UI", 10),
-                           text="W/↑ accelerate   S/↓/Space brake   A/← steer   D/→ steer   Esc quit")
+                           text="W/↑ accelerate   S/↓/Space brake   Tap A/← or D/→ to steer   Esc quit")
         self._pump_events()
         return None
+
+    def show_episode_result(self, reason: Optional[str], route_progress: float) -> None:
+        """Keep a rendered human episode's result visible until the user closes it."""
+        if not self.render_enabled or self._root is None or self._canvas is None:
+            return
+        message = f"Episode ended: {reason or 'incomplete'}\nRoute: {100.0 * route_progress:.1f}%\nPress Esc or close this window to continue."
+        self._canvas.create_rectangle(190, 255, 810, 425, fill="#111827", outline="#e5e7eb", width=2)
+        self._canvas.create_text(500, 340, text=message, fill="white", font=("Segoe UI", 18, "bold"), justify="center")
+        while not self._window_closed:
+            self._pump_events()
+            if not self._window_closed:
+                time.sleep(0.05)
 
     def close(self):
         self._close_window()

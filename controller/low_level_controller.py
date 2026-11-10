@@ -59,9 +59,9 @@ class LowLevelController:
         # Base lateral offset target from lane_target
         lateral_offset = 0.0
         if decision.lane_target == "LEFT" or maneuver in (MANEUVER_TURN_LEFT, MANEUVER_PREPARE_LEFT):
-            lateral_offset = -0.5
+            lateral_offset = -1.0
         elif decision.lane_target == "RIGHT" or maneuver in (MANEUVER_TURN_RIGHT, MANEUVER_PREPARE_RIGHT):
-            lateral_offset = 0.5
+            lateral_offset = 1.0
 
         effective_lane_dev = lane_deviation_m - lateral_offset
         heading_error_rad = np.radians(heading_error_deg)

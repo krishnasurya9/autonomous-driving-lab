@@ -57,7 +57,7 @@ How does a trained SAC policy compare with a local LLM planner and a human drive
 ### System architecture
 
 1. A seeded scenario initializes the driving environment.
-2. The environment provides a shared seven-value observation.
+2. The environment provides a shared eight-value observation.
 3. The selected agent chooses an action:
    - **SAC:** continuous action each simulation step.
    - **LLM:** high-level maneuver at a configured 1 Hz, followed by a deterministic low-level controller.
@@ -69,7 +69,7 @@ How does a trained SAC policy compare with a local LLM planner and a human drive
 
 - The working environment is a lightweight, top-down seeded road simulator.
 - The simulation advances at 20 Hz and uses a target speed of 40 km/h.
-- The observation has seven values: normalized speed, target speed, lane deviation, heading error, obstacle distance, route progress, and road curvature.
+- The observation has eight values: normalized speed, target speed, lane deviation, heading error, obstacle distance, route progress, road curvature, and signed obstacle lateral offset.
 - The action has two continuous values: steering and throttle/brake, each bounded by `[-1, 1]`.
 - The current task has simplified vehicle dynamics and a limited set of scenarios; results apply to this task.
 
@@ -92,9 +92,10 @@ If asked why reward shaping is used, explain that it gives the learner feedback 
 
 | Split | Current project seeds | Use |
 |---|---:|---|
-| Training | 20 (`1000–1019`) | SAC learning; the runner cycles through this split |
-| Validation | 10 (`1100–1109`) | Checkpoints and model selection |
-| Held-out test | 20 (`2000–2019`) | Final comparison; keep separate from tuning |
+| Training | 100 (`1000–1099`) | SAC learning; the trainer cycles through this split |
+| Validation | 25 (`1100–1124`) | Checkpoint selection |
+| Development audit | 40 (`2000–2039`) | Used to audit 7-value candidates; not final evidence |
+| Held-out comparison | 20 (`2040–2059`) | 8-value SAC evaluated once; retain for matching human and real-LLM runs |
 
 For a fair comparison, use the same held-out seed for each agent and compare outcomes within that seed. Do not combine results from different tasks or treat a fallback controller as an LLM result.
 
@@ -104,7 +105,7 @@ For a fair comparison, use the same held-out seed for each agent and compare out
 - **Feature extraction:** speed, lane deviation, heading error, route progress, steering, throttle/brake, and episode outcomes.
 - **Preprocessing:** the metrics code parses logs and derives episode-level measures. Before a full experiment, check for missing fields, invalid values, duplicate runs, and incomplete agent/seed sets.
 - **EDA:** the analysis pipeline can produce metric summaries, trajectory overlays, speed profiles, and an SAC evaluation curve.
-- **Current data limitation:** only a small number of smoke runs exist; plots and summary files are not final benchmark evidence.
+- **Current data limitation:** the held-out split contains 20 SAC episodes but no eligible human or real-LLM episodes. There is no three-agent paired comparison yet.
 
 ### Evaluation measures and planned statistics
 
@@ -118,11 +119,14 @@ The proposed analysis compares per-seed differences. A paired t-test may be suit
 
 ## Current status to describe honestly
 
-- The dependency, compilation, Gymnasium/SB3, environment, and analysis checks have passed.
-- A 5,000-step SAC pilot produced a five-episode validation reward of `886.61 ± 472.52`. The variation is wide; this is an early pilot, not proof of a capable policy.
-- An 80-step matched smoke pair on seed 2003 reached the time limit without collision for SAC and the LLM fallback.
-- Ollama was not running during the check. The LLM telemetry recorded `rule_fallback`; no real model inference has been verified.
-- No human episode has been collected yet.
+- The active entry points, trainer, and evaluation use the seeded 2D simulator. The MetaDrive wrapper is legacy code.
+- The feasibility check passed deterministic reset/rollout, eight-value observations, finite rewards, and the 100-step horizon.
+- The old 7-value, 50,000-step candidate completed 0/20 routes on seeds 2020–2039; 19 episodes timed out, one collided, no road departures occurred, and mean route progress was 39.8%. This model is incompatible with the updated observation and is not loaded.
+- The training pipeline cycles through the 100 train seeds and selects checkpoints on the 25 validation seeds. The owner chose to keep seeds 2040–2059 and stop retraining; the 8-value SAC policy has already been evaluated once on them.
+- LM Studio is now reachable at `127.0.0.1:1234`; the configured Nemotron model returned a decision in a development-seed smoke run, and telemetry reported `llm_real_inference: true`. This confirms connectivity, not benchmark performance. Fallback episodes remain excluded from real-LLM paired statistics.
+- Earlier human episodes ended from off-road termination after 4.7 and 9.0 seconds. Keyboard steering is now less sensitive, and a result overlay keeps the terminal reason visible. Live keyboard driving still needs a hands-on confirmation.
+- The 50,000-step 8-value policy completed 20/20 routes with zero collisions or road departures, but averaged about 86 km/h against a 40 km/h target. Speed tracking is a substantial weakness. Do not describe it as a balanced or fully capable driving policy.
+- The comparison split has SAC data only. No complete, valid comparison across Human, real LLM, and SAC exists yet. Do not claim a winner or statistical significance.
 
 ## Likely review questions
 
@@ -139,18 +143,18 @@ Use the same seeded scenario and common measures for each agent. Keep training, 
 Progress, lane keeping, target-speed tracking, safety, and destination completion, with a penalty for abrupt steering. The balance of these terms needs validation.
 
 **What have you demonstrated so far?**  
-The pipeline runs and the 5,000-step pilot produces a real validation record. A short SAC/fallback smoke pair was also collected. These checks confirm integration, not which agent performs best.
+The deterministic 2D environment, SAC training pipeline, evaluation loop, telemetry, and analysis pipeline run end to end. The 8-value SAC candidate completed 20/20 routes on the comparison seeds with no collision or road-departure events, but its average speed was about 86 km/h against a 40 km/h target. LM Studio has now returned a real planner decision in a development-seed smoke run. There are still no eligible human or real-LLM episodes on the comparison split, so there is not yet a valid three-agent comparison.
 
 **Has the LLM baseline been tested?**  
-The interface and fallback path have been checked, but Ollama was unavailable. The current run is a rule-based fallback, not real LLM inference.
+Yes. LM Studio returned a real response on development seed 2000, and its telemetry reports `LMStudioBackend` and `llm_real_inference: true`. This smoke run does not count as a held-out comparison episode.
 
 **What remains before drawing conclusions?**  
-Train longer and inspect validation variation, run the real local model, collect human episodes, complete matched held-out runs, and then perform the planned analysis.
+Keep the current policy and seed split unchanged. Collect real-LLM and human episodes on seeds 2040–2059, confirm inference and interaction for every run, and then perform the paired analysis. Report the SAC speed-tracking weakness alongside route completion.
 
 ## Before presenting
 
 - Explain SAC as the main project method; introduce LLM and human agents as baselines.
 - Know the observation, action, reward components, and seed splits.
 - Distinguish implemented components from planned experiments.
-- Describe the pilot as preliminary and disclose the LLM fallback and missing human data.
+- Disclose the collision observed in the SAC smoke run, the unavailable LLM service, and the missing complete paired dataset.
 - Verify bibliographic details and research-gap claims against the original papers.

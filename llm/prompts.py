@@ -20,6 +20,8 @@ Output Format Rules:
   "maneuver": "<MANEUVER_NAME>",
   "lane_target": "<CENTER|LEFT|RIGHT>"
 }
+- When an obstacle is present, use its signed lateral offset to choose the opposite side: positive means the obstacle is to the vehicle's right, so target LEFT; negative means target RIGHT. Begin the lane change early enough to pass safely.
+- Keep at least about 1.0 m lateral separation from the obstacle and avoid leaving the road.
 """
 
 def generate_user_prompt(driving_state_text: str) -> str:
