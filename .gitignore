@@ -23,6 +23,7 @@ credentials.json
 
 # Generated experiment outputs (keep telemetry Python package in git)
 telemetry/*.json
+telemetry_2d/*.json
 telemetry/**/__pycache__/
 recordings/
 results/
