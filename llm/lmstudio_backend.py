@@ -5,14 +5,14 @@ from llm.backend import LLMBackend
 from llm.prompts import SYSTEM_PROMPT
 
 class LMStudioBackend(LLMBackend):
-    """Adapter for LM Studio OpenAI-compatible REST API (http://localhost:1234/v1/chat/completions)."""
+    """Adapter for LM Studio's OpenAI-compatible REST API."""
 
     def __init__(
         self,
         model_name: str = "local-model",
-        endpoint: str = "http://localhost:1234/v1/chat/completions",
+        endpoint: str = "http://127.0.0.1:1234/v1/chat/completions",
         temperature: float = 0.1,
-        timeout_sec: float = 5.0,
+        timeout_sec: float = 60.0,
     ):
         super().__init__(model_name=model_name, temperature=temperature)
         self.endpoint = endpoint
@@ -34,8 +34,7 @@ class LMStudioBackend(LLMBackend):
             response = requests.post(self.endpoint, json=payload, timeout=self.timeout_sec)
             latency = time.time() - start
             if response.status_code == 200:
-                data = response.json()
-                raw_text = data["choices"][0]["message"]["content"]
+                raw_text = response.json()["choices"][0]["message"]["content"].strip()
                 return raw_text, latency
             else:
                 return "", latency
